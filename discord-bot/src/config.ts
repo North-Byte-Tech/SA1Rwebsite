@@ -29,14 +29,15 @@ export const config = {
   bot: {
     httpPort: Number(process.env.BOT_HTTP_PORT ?? 30121),
   },
-  // Website integration - the live on-duty status board. The bot polls
-  // portal-api's PUBLIC GET /status (no secret needed) and edits a single
-  // message in the configured channel. Both must be set to enable it; leave
-  // DISCORD_STATUS_CHANNEL_ID blank to skip the feature entirely, the same
-  // graceful-degradation stance as the audit-log server.
+  // Website integration - the live on-duty status board. The bot polls the
+  // web app's PUBLIC GET /api/status (no secret needed - portal-api used to
+  // sit in front of this, now the website itself hosts the status snapshot)
+  // and edits a single message in the configured channel. Both must be set
+  // to enable it; leave DISCORD_STATUS_CHANNEL_ID blank to skip the feature
+  // entirely, the same graceful-degradation stance as the audit-log server.
   status: {
     channelId: process.env.DISCORD_STATUS_CHANNEL_ID ?? "",
-    portalApiUrl: process.env.PORTAL_API_URL ?? "",
+    webBaseUrl: process.env.WEB_BASE_URL ?? "",
     pollSeconds: Number(process.env.STATUS_POLL_SECONDS ?? 60),
   },
 };

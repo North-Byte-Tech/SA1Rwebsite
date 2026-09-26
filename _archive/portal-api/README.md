@@ -1,4 +1,4 @@
-# sfos-portal-api
+# sa1r-portal-api
 
 Standalone Node.js process (not a FiveM resource, unlike the main SFOS
 repo's `services/discord-bot`). Small read-only HTTP API in front of the
@@ -10,7 +10,7 @@ server-side code is the only intended caller.
 Routes:
 
 - `GET /` — **public** landing page. What a person sees opening the API's
-  base URL (e.g. `https://api.kcrp.nz/`) in a browser: a small info page
+  base URL (e.g. `https://api.sa1r.com/`) in a browser: a small info page
   showing whether the service can reach the **game MySQL database** (a green
   "Online" badge / "Connected", or an amber "Degraded" badge / "Unreachable"
   when MySQL is down), its version/uptime, whether live status has been
@@ -53,15 +53,15 @@ Routes:
   `GET/POST /admin/staff`, `PATCH/DELETE /admin/staff/:accountId`,
   `GET /admin/staff-actions`, `GET /admin/applications`,
   `POST /admin/applications/:id`. Every one of these requires the shared
-  secret *and* an `x-sfos-actor-account-id` header identifying the acting
-  admin — re-checked against `sfos.staff.admin` in `permission_grants` on
+  secret *and* an `x-sa1r-actor-account-id` header identifying the acting
+  admin — re-checked against `sa1r.staff.admin` in `permission_grants` on
   every single request (see `index.ts`'s `adminRouter` middleware), not
   trusted from anything cached client-side. `web`'s admin API routes are
   the only intended source for that header, and they derive it solely from
   the caller's own session — never from client-submitted input, since a
   spoofed header here would let a non-admin claim to be any account id.
   Every mutation logs a `staff_actions` row. The admin routes assume
-  `sfos.staff.admin` has already been granted to at least one account
+  `sa1r.staff.admin` has already been granted to at least one account
   (e.g. through the FiveM `sfos-admin` menu, or a manual `permission_grants`
   row) — there's no bootstrap path here the way `sfos-admin`'s ACE-group
   fallback provides in-game.
@@ -79,9 +79,9 @@ database before this endpoint will work.
    and a `PORTAL_API_SECRET` — generate a random string, and set the exact
    same value as `PORTAL_API_SECRET` in `web`'s `.env`/Vercel project
    settings.
-2. `pnpm install` (from repo root), then `pnpm --filter sfos-portal-api dev`
-   for local iteration, or `pnpm --filter sfos-portal-api build && pnpm
-   --filter sfos-portal-api start` to run compiled.
+2. `pnpm install` (from repo root), then `pnpm --filter sa1r-portal-api dev`
+   for local iteration, or `pnpm --filter sa1r-portal-api build && pnpm
+   --filter sa1r-portal-api start` to run compiled.
 
 ## Running on Windows Server (production)
 
@@ -93,22 +93,22 @@ any non-Windows platform).
 
 ```powershell
 pnpm install
-pnpm --filter sfos-portal-api build
+pnpm --filter sa1r-portal-api build
 ```
 
 Then, from an **elevated** (Run as Administrator) PowerShell or cmd:
 
 ```powershell
-pnpm --filter sfos-portal-api service:install
+pnpm --filter sa1r-portal-api service:install
 ```
 
-This installs and starts a service named `sfos-portal-api` that restarts
+This installs and starts a service named `sa1r-portal-api` that restarts
 automatically on crash or reboot. Manage it from `services.msc`, or:
 
 ```powershell
-net start sfos-portal-api
-net stop sfos-portal-api
-pnpm --filter sfos-portal-api service:uninstall   # remove it
+net start sa1r-portal-api
+net stop sa1r-portal-api
+pnpm --filter sa1r-portal-api service:uninstall   # remove it
 ```
 
 Logs go to the Windows Event Log (Application) under the service name -
@@ -119,9 +119,9 @@ To deploy an update later:
 ```powershell
 git pull
 pnpm install
-pnpm --filter sfos-portal-api build
-net stop sfos-portal-api
-net start sfos-portal-api
+pnpm --filter sa1r-portal-api build
+net stop sa1r-portal-api
+net start sa1r-portal-api
 ```
 
 ### Reverse proxy (required)
@@ -149,13 +149,13 @@ support - see Caddy's docs). Point `web`'s `PORTAL_API_URL` at
 If `portal-api` ever moves to a Linux host, the same pattern as the main
 SFOS repo's `services/discord-bot` applies: `sudo bash
 portal-api/deploy/install.sh` installs a systemd unit (`systemctl status
-sfos-portal-api`, `journalctl -u sfos-portal-api -f`), and the same Caddy
+sa1r-portal-api`, `journalctl -u sa1r-portal-api -f`), and the same Caddy
 config above works unchanged.
 
 ## Auth model
 
 Every route except `GET /health` and `GET /status` requires an
-`x-sfos-portal-secret` header matching `PORTAL_API_SECRET` — a static
+`x-sa1r-portal-secret` header matching `PORTAL_API_SECRET` — a static
 shared secret, same trust model as the main SFOS repo's
 `services/discord-bot` `/log` endpoint. `GET /status` is the one
 deliberately public, unauthenticated route (it's the live on-duty board's
@@ -164,8 +164,8 @@ browser-facing CORS surface: `web`'s server-side code (API routes / server
 actions) is the only intended caller, and it's responsible for checking
 the actual signed-in user's session/permissions *before* calling here.
 `/admin/*` is where this actually happens (Phase 4): every request there
-re-derives `sfos.staff.admin` from `permission_grants` for the
-`x-sfos-actor-account-id` given, on every single call, rather than trusting
+re-derives `sa1r.staff.admin` from `permission_grants` for the
+`x-sa1r-actor-account-id` given, on every single call, rather than trusting
 anything cached client-side — matching the "never trust cached/client-
 supplied authorization" convention used throughout this platform.
 

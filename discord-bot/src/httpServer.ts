@@ -41,10 +41,10 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
   person_created: { title: "🆔 Person Record Created", color: 0x8b98a5 },
   player_downed: { title: "🩸 Player Downed", color: 0xe0554a },
   player_revived: { title: "💉 Player Revived", color: 0x3fb27f },
-  // Website recruitment flow - pushed by portal-api (services/portal-api's
-  // discordLog.ts), not FXServer. A department application submitted through
-  // the website, and a staff accept/reject decision made in the admin
-  // dashboard. Same /log contract as everything above.
+  // Website recruitment flow - these three event types are defined for the
+  // same /log contract as everything above, but nothing currently posts
+  // them: portal-api used to relay them here on submit/accept/reject before
+  // it was retired, and that relay hasn't been rebuilt on web's side yet.
   application_submitted: { title: "📨 Application Submitted", color: 0x2f7de1 },
   application_accepted: { title: "✅ Application Accepted", color: 0x3fb27f },
   application_rejected: { title: "❌ Application Rejected", color: 0xe0554a },
@@ -76,7 +76,7 @@ export function startLogHttpServer(client: Client): void {
   });
 
   app.listen(config.bot.httpPort, () => {
-    console.log(`[sfos-discord-bot] log HTTP server listening on port ${config.bot.httpPort}`);
+    console.log(`[sa1r-discord-bot] log HTTP server listening on port ${config.bot.httpPort}`);
   });
 }
 

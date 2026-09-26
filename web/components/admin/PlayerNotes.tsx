@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { buttonClasses } from "@/components/ui/Button";
-import type { PlayerNoteRow } from "@/lib/adminApi";
+import type { PlayerNoteRow } from "@/lib/adminData";
 
 const INPUT_CLASSES =
   "flex-1 rounded-md border border-line bg-ink px-3 py-2 text-sm text-bone placeholder:text-muted "
   + "focus:border-trooper-500 focus:outline-none focus:ring-1 focus:ring-trooper-500";
 
-export function PlayerNotes({ accountId, notes }: { accountId: number; notes: PlayerNoteRow[] }) {
+export function PlayerNotes({ accountId, notes }: { accountId: string; notes: PlayerNoteRow[] }) {
   const router = useRouter();
   const [note, setNote] = useState("");
   const [pending, setPending] = useState(false);
@@ -48,7 +48,7 @@ export function PlayerNotes({ accountId, notes }: { accountId: number; notes: Pl
             <li key={entry.id} className="py-2 text-sm">
               <p className="text-bone">{entry.note}</p>
               <p className="text-xs text-muted">
-                {entry.author_name ?? "unknown"} — {new Date(entry.created_at).toLocaleString()}
+                {entry.authorName ?? "unknown"} — {new Date(entry.createdAt).toLocaleString()}
               </p>
             </li>
           ))}

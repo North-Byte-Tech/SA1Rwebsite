@@ -35,7 +35,7 @@ if %errorlevel%==0 (
 ) else (
     echo Starting portal-api...
     REM If you installed portal-api as a Windows Service (pnpm service:install),
-    REM use "net start sfos-portal-api" instead of the line below - running both
+    REM use "net start sa1r-portal-api" instead of the line below - running both
     REM the service AND this would fight over port 30130.
     start "portal-api (:30130)" cmd /k "cd /d "%PORTAL_API_DIR%" && node dist\index.js"
 )
@@ -50,7 +50,7 @@ echo -- portal-api (local) --
 curl -s http://127.0.0.1:30130/health
 echo.
 echo -- through Caddy (public) --
-curl -s https://api.kcrp.nz/health
+curl -s https://api.sa1r.com/health
 echo.
 echo.
 echo If either line above is empty/errored, check that process's console window for the actual error.

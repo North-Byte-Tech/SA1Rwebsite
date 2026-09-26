@@ -1,45 +1,45 @@
-# KCRP Website
+# SA1R Website
 
-Kiwi Cove Roleplay's public website, player portal, staff admin dashboard,
-and emergency-department (PD/FENZ/HHSJ) recruitment + live status portal.
+San Andreas 1st Response RP's public website, player portal, staff admin
+dashboard, and emergency-department (LEO/SAFD/SAEMS) recruitment + live
+status portal.
 
-A pnpm workspace with three deployable services:
+A pnpm workspace with two deployable services:
 
 - [`web/`](web/) — Next.js (App Router) app, deployed to Vercel. Public
   site, player portal, admin dashboard, all gated by a Discord-OAuth
-  session. Owns its own Postgres database for website accounts (via
-  Prisma — see `web/prisma/schema.prisma`), so signing in works whether or
-  not that Discord account has ever played on the FiveM server. Never
-  touches the game's MySQL database directly.
-- [`portal-api/`](portal-api/) — Express API, deployed on the game
-  server's Windows Server host (as a Windows Service — see its README)
-  since that's where FXServer runs. Holds the one MySQL credential and is
-  `web`'s only path to the SFOS database, called server-side over HTTPS
-  with a shared secret. `web` calls it once per sign-in as a best-effort
-  enrichment step (game account id, permissions, staff status, characters)
-  — it's never required for the website login itself to succeed.
+  session. Owns its own Postgres database (via Prisma — see
+  `web/prisma/schema.prisma`) as its ONLY datastore: accounts, staff
+  roster, bans, player notes, permissions, applications, and the live
+  status snapshot all live there. Never touches the game's MySQL database.
 - [`discord-bot/`](discord-bot/) — Express + discord.js process, ported from
   the game-server repo (`SFRP_Core`)'s `services/discord-bot` and deployed on
-  the same game-server host (it needs direct MySQL access). Syncs Discord
-  roles into `permission_grants`, offers staff slash commands, and — for the
-  website — posts recruitment-application events (pushed by `portal-api`) and
-  keeps a live on-duty status board (polled from `portal-api`'s public
-  `/status`) in Discord. See its README.
+  the game-server host (it needs direct MySQL access for role sync). For the
+  website, it keeps a live on-duty status board in Discord by polling
+  `web`'s public `GET /api/status`. See its README.
 
-See each service's README for local setup and deployment. This repo is
-intentionally separate from the FiveM/game-server (`SFRP_Core`) repo — see
-that repo's design doc ("Community Web Platform") for the full
-architecture, trust model, phased build plan, and database reference this
-was scaffolded from.
+`portal-api/` (the Express service that used to bridge `web` to the FiveM
+game server's MySQL database) has been retired - every feature it provided
+(game-linked accounts, characters, staff/ban/permission/application
+management) has been rebuilt directly on `web`'s own Postgres database. Its
+source is kept at [`_archive/portal-api/`](_archive/portal-api/) for
+reference only; it is not part of the running system and isn't deployed
+anywhere. One consequence of the retirement: there's no more live link to
+FiveM character data, so the player portal no longer shows a character
+roster, and applying/using the portal no longer requires having connected
+to the FiveM server first - any signed-in Discord user can.
+
+See each service's README for local setup and deployment.
 
 ## Getting started
 
 ```bash
 pnpm install
-pnpm --filter sfos-portal-api dev   # terminal 1
-pnpm --filter sfos-web dev          # terminal 2
-pnpm --filter sfos-discord-bot dev  # terminal 3 (optional, needs a Discord bot + game MySQL)
+pnpm --filter sa1r-web dev          # terminal 1
+pnpm --filter sa1r-discord-bot dev  # terminal 2 (optional, needs a Discord bot + game MySQL)
 ```
 
 Each service needs its own `.env`/`.env.local` — copy `.env.example` in
-each directory and fill in real values (see the respective READMEs).
+each directory and fill in real values (see the respective READMEs). For
+just iterating on `web`'s UI, see its README's `DEV_BYPASS_AUTH` note - no
+`.env` is required at all for that.

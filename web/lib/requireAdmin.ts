@@ -1,21 +1,22 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
 
 export { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
 
-// Fast session-level gate so an unauthorized caller gets a 403 without a
-// round trip to portal-api. Not the authoritative check - portal-api's
-// /admin/* router re-derives sfos.staff.admin from the DB on every request
-// regardless, since this session's permissions could be stale (see
-// portal-api's index.ts admin router comment).
-export async function requireAdminActor(): Promise<number | null> {
-  const session = await getServerSession(authOptions);
-  if (!session || session.accountId === null) {
+export interface AdminActor {
+  id: string;
+  name: string | null;
+}
+
+// Session-level admin gate. This is now the ONLY check - there is no
+// separate service re-deriving sa1r.staff.admin from anywhere else, so
+// whatever this session says is authoritative. Every /admin page and
+// /api/admin/* route calls this first and 403s/renders nothing if it comes
+// back null.
+export async function requireAdminActor(): Promise<AdminActor | null> {
+  const session = await getSession();
+  if (!session || !session.permissions.includes(STAFF_ADMIN_PERMISSION)) {
     return null;
   }
-  if (!session.permissions.includes(STAFF_ADMIN_PERMISSION)) {
-    return null;
-  }
-  return session.accountId;
+  return { id: session.userId, name: session.user?.name ?? null };
 }

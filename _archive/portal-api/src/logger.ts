@@ -10,14 +10,14 @@ mkdirSync(logDir, { recursive: true });
 const logFile = join(logDir, "portal-api.log");
 
 export function logError(context: string, err: unknown): void {
-  console.error(`[sfos-portal-api] ${context}:`, err);
+  console.error(`[sa1r-portal-api] ${context}:`, err);
   const detail = err instanceof Error ? (err.stack ?? err.message) : String(err);
   appendFileSync(logFile, `${new Date().toISOString()} [${context}] ${detail}\n`);
 }
 
 // Always-on informational console output (startup, lifecycle).
 export function logInfo(message: string): void {
-  console.log(`[sfos-portal-api] ${message}`);
+  console.log(`[sa1r-portal-api] ${message}`);
 }
 
 // Verbose console output, only when DEBUG=true (config.debug) - matches the
@@ -27,5 +27,5 @@ export function logDebug(message: string): void {
   if (!config.debug) {
     return;
   }
-  console.debug(`[sfos-portal-api] ${message}`);
+  console.debug(`[sa1r-portal-api] ${message}`);
 }

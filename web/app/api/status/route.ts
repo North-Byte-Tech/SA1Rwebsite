@@ -1,21 +1,20 @@
 import { NextResponse } from "next/server";
-import { fetchStatus } from "@/lib/portalApi";
+import { getStatusSnapshot } from "@/lib/status";
 
-// Public - no session check. Proxies portal-api's equally-public GET
-// /status so the browser only ever talks to this app, never portal-api
-// directly (see lib/portalApi.ts's fetchStatus comment).
+// Public - no session check. Reads this app's own Postgres-backed status
+// snapshot directly (see lib/status.ts) - no separate portal-api hop
+// anymore.
 //
-// Forces this route to run per-request rather than be statically
-// optimized - it already does a no-store fetch (fresh status every load),
-// so without this Next throws a DynamicServerError trying to prerender it.
+// Forces this route to run per-request rather than be statically optimized,
+// since it reads fresh from the DB every time.
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const snapshot = await fetchStatus();
+    const snapshot = await getStatusSnapshot();
     return NextResponse.json(snapshot);
   } catch (err) {
-    console.error("[sfos-web] /api/status failed:", err);
+    console.error("[sa1r-web] /api/status GET failed:", err);
     return NextResponse.json({ data: null, updatedAt: null }, { status: 502 });
   }
 }

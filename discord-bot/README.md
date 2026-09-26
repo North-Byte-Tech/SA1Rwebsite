@@ -1,4 +1,4 @@
-# sfos-discord-bot
+# sa1r-discord-bot
 
 Standalone Node.js process (not a FiveM resource). Ported from the main SFOS
 repo (`SFRP_Core`)'s `services/discord-bot` into this website workspace, with
@@ -51,14 +51,15 @@ graceful-degradation stance as the rest of the platform.
 4. Copy `.env.example` to `.env` and fill in `DISCORD_BOT_TOKEN`,
    `DISCORD_CLIENT_ID`, `DISCORD_GUILD_ID`, DB credentials, and
    `FXSERVER_SYNC_URL`/`FXSERVER_SYNC_SECRET`. For the website features, also
-   set `DISCORD_LOG_CHANNEL_ID` + `FXSERVER_LOG_SECRET` (application events)
-   and `DISCORD_STATUS_CHANNEL_ID` + `PORTAL_API_URL` (status board).
+   set `DISCORD_LOG_CHANNEL_ID` + `FXSERVER_LOG_SECRET` (FXServer audit log)
+   and `DISCORD_STATUS_CHANNEL_ID` + `WEB_BASE_URL` (status board, polls the
+   web app's `/api/status` directly - portal-api has been retired).
 5. Populate `discord_role_mappings` (see the main SFOS repo's
    `database/migrations/0002_permissions.sql`) with your Discord role IDs
-   mapped to `sfos.role.*` permissions.
-6. `pnpm install` (from repo root), then `pnpm --filter sfos-discord-bot dev`
-   for local iteration, or `pnpm --filter sfos-discord-bot build && pnpm
-   --filter sfos-discord-bot start` to run compiled.
+   mapped to `sa1r.role.*` permissions.
+6. `pnpm install` (from repo root), then `pnpm --filter sa1r-discord-bot dev`
+   for local iteration, or `pnpm --filter sa1r-discord-bot build && pnpm
+   --filter sa1r-discord-bot start` to run compiled.
 
 Slash commands are registered automatically (guild-scoped) on every start.
 

@@ -9,7 +9,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 API_DIR="$REPO_ROOT/portal-api"
-SERVICE_NAME="sfos-portal-api"
+SERVICE_NAME="sa1r-portal-api"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 RUN_AS_USER="${SUDO_USER:-$(whoami)}"
 NODE_PATH="$(command -v node || true)"
@@ -31,7 +31,7 @@ fi
 
 if [ ! -f "$API_DIR/dist/index.js" ]; then
     echo "$API_DIR/dist/index.js not found - building now..."
-    (cd "$REPO_ROOT" && pnpm --filter sfos-portal-api build)
+    (cd "$REPO_ROOT" && pnpm --filter sa1r-portal-api build)
 fi
 
 echo "Installing $SERVICE_FILE (WorkingDirectory=$API_DIR, user=$RUN_AS_USER, node=$NODE_PATH)"
@@ -39,7 +39,7 @@ sed \
     -e "s#__REPO_PATH__#$REPO_ROOT#g" \
     -e "s#__NODE_PATH__#$NODE_PATH#g" \
     -e "s#__SERVICE_USER__#$RUN_AS_USER#g" \
-    "$SCRIPT_DIR/sfos-portal-api.service" > "$SERVICE_FILE"
+    "$SCRIPT_DIR/sa1r-portal-api.service" > "$SERVICE_FILE"
 
 systemctl daemon-reload
 systemctl enable --now "$SERVICE_NAME"

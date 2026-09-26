@@ -1,10 +1,10 @@
-// Website accounts database - Postgres, owned entirely by `web`. This is
-// deliberately separate from the FiveM/SFOS MySQL database that portal-api
-// sits in front of (see root README's architecture section): signing in
-// with Discord always creates/loads a row here, whether or not that
-// Discord account has ever connected to the FiveM server. portal-api is
-// only consulted afterwards, best-effort, to enrich the account with
-// game-linked data - see lib/auth.ts.
+// Website accounts database - Postgres, owned entirely by `web`. This used
+// to be paired with a separate portal-api service that bridged to the
+// FiveM/SFOS MySQL game database (game accounts, characters, staff roster,
+// bans, etc); portal-api has been retired and every admin feature below is
+// now backed by this Postgres database alone. There is no more link to live
+// game-server data (no game account id, no character roster) - a website
+// User row IS the account.
 //
 // Account/Session/VerificationToken below are the exact shape
 // @next-auth/prisma-adapter requires (https://authjs.dev/reference/adapter/prisma).
@@ -59,20 +59,17 @@ model User {
   // own column so reading it never needs a join through Account.
   discordId String? @unique
 
-  // Cached result of portal-api's /auth/resolve, refreshed once per sign-in
-  // (lib/auth.ts's events.signIn), not on every session read. Stays at its
-  // previous value (null/false/empty for a brand new account) whenever
-  // portal-api or the game server's MySQL is unreachable, or the player has
-  // never linked this Discord account to the FiveM server - either way,
-  // signing in to the website itself never depends on that lookup
-  // succeeding.
-  gameAccountId Int?
-  isStaff       Boolean  @default(false)
-  permissions   String[] @default([])
-  characters    Json?
+  // Site-admin state, managed entirely through this app's own /admin UI
+  // (lib/adminData.ts) - not re-derived from anywhere external anymore.
+  isStaff     Boolean  @default(false)
+  permissions String[] @default([])
 
   accounts Account[]
   sessions Session[]
+
+  ban         Ban?
+  staffMember StaffMember?
+  playerNotes PlayerNote[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,4 +81,105 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum ApplicationStatus {
+  pending
+  accepted
+  rejected
+}
+
+// A department recruitment application, submitted by any signed-in Discord
+// user (see app/api/applications/route.ts) - not tied to a User row by
+// foreign key so a submission always succeeds even for an applicant with no
+// prior sign-in, matching the old portal-api behaviour.
+model Application {
+  id              String            @id @default(cuid())
+  discordId       String
+  discordUsername String
+  department      String
+  answers         Json
+  status          ApplicationStatus @default(pending)
+  createdAt       DateTime          @default(now())
+  reviewedAt      DateTime?
+
+  // Plain audit-trail strings, not a foreign key - kept consistent with
+  // Ban.bannedById/StaffMember.appointedById/PlayerNote.authorId below, and
+  // deliberately not enforced against User so a review still records who
+  // did it even if that admin's account is later deleted (and so this keeps
+  // working under DEV_BYPASS_AUTH's fake, non-persisted actor id).
+  reviewedById   String?
+  reviewedByName String?
+
+  @@index([discordId])
+  @@index([status])
+}
+
+// One row per currently-banned user - unbanning deletes the row (history of
+// past bans lives in AuditLog instead, matching portal-api's boolean
+// is_banned column rather than a ban-history table).
+model Ban {
+  userId String @id
+
+  reason    String
+  bannedAt  DateTime  @default(now())
+  expiresAt DateTime?
+
+  bannedById   String?
+  bannedByName String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PlayerNote {
+  id        String   @id @default(cuid())
+  userId    String
+  note      String
+  createdAt DateTime @default(now())
+
+  authorId   String?
+  authorName String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// One row per staff appointment - removing staff deletes the row (past
+// appointments live in AuditLog).
+model StaffMember {
+  userId String @id
+
+  title       String
+  notes       String?
+  appointedAt DateTime @default(now())
+
+  appointedById   String?
+  appointedByName String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Append-only admin action log - replaces portal-api's staff_actions table.
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorName  String?
+  action     String
+  targetType String?
+  targetId   String?
+  details    String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// Single-row live server status snapshot, reported by the FiveM server (or
+// anything else with the shared secret) and read by the public status board
+// and the Discord bot's status announcer - replaces portal-api's in-memory
+// statusStore.ts with a persistent equivalent.
+model StatusSnapshot {
+  id        Int      @id @default(1)
+  data      Json
+  updatedAt DateTime @updatedAt
 }

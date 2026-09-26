@@ -1,60 +1,42 @@
-# sfos-web
+# sa1r-web
 
 Next.js (App Router, TypeScript) community website — landing/rules,
 player portal, LEO/SAFD/SAEMS recruitment, and an admin dashboard, all as one
-app gated by session + permission checks. Deployed to Vercel. Talks to the
-game database only indirectly, through the sibling `portal-api` service
-(never holds a MySQL credential itself).
+app gated by session + permission checks. Deployed to Vercel. Fully
+self-contained: this app's own Postgres database is the only datastore -
+there is no separate backend service anymore.
 
 ## Accounts and login
 
-Signing in with Discord always creates a real website account, in this
-app's own Postgres database (`prisma/schema.prisma`, via
-`@next-auth/prisma-adapter`) — whether or not that Discord account has ever
-connected to the FiveM server. That's deliberate: the website's login
-doesn't depend on portal-api or the game server's MySQL being reachable.
-
-Once signed in, `lib/auth.ts`'s `events.signIn` makes one best-effort call
-to portal-api's `POST /auth/resolve` to look up the player's FiveM
-`accountId`, permissions, staff status, and characters, and caches the
-result on that user's row. If portal-api is down, misconfigured, or the
-Discord account just hasn't connected to the server yet, this fails
-gracefully — you get a normal, working website account with those fields
-left at "not linked" (`accountId: null` in the session) until a later
-sign-in resolves successfully. Nothing about the portal-api round trip can
-block or break signing in to the website itself.
+Signing in with Discord creates a real website account in this app's own
+Postgres database (`prisma/schema.prisma`, via `@next-auth/prisma-adapter`).
+That account row is the single source of truth for everything: staff
+status, permissions, bans, notes, and application history all live here.
 
 ### Bootstrapping the first admin
 
-`/admin` is gated on `sfos.staff.admin`, which only ever comes from
-portal-api re-deriving it from the game database's `permission_grants`
-table — there's no bootstrap path there (see portal-api's README). If
-portal-api isn't deployed/reachable yet but you already know your account
-is staff in the game database, set `ADMIN_BYPASS_ACCOUNTS` (see
-`.env.example`) to get past this site's own `/admin` gate in the meantime.
-Sign out and back in for it to take effect (it's applied in
-`events.signIn`). This is explicitly temporary — portal-api's admin
-endpoints still independently re-check the real `permission_grants` table
-for that account id before doing anything, so it can't grant authority
-that doesn't already exist there; unset it once portal-api is reachable.
+`/admin` is gated on `sa1r.staff.admin`, managed entirely through the
+`/admin` UI once at least one admin exists. To get the very first admin,
+set `ADMIN_BOOTSTRAP_DISCORD_IDS` (see `.env.example`) to your Discord user
+id before signing in - `lib/auth.ts`'s `events.signIn` grants
+`sa1r.staff.admin` to any listed id automatically and idempotently. It's
+safe to leave set permanently for whoever should always have admin;
+everyone else's access should be granted through the admin UI instead.
 
-**Phase 3 status**: public pages (landing, rules, how-to-join, department
-overview/detail), a live on-duty status board (`/status`, polling this
-app's own `/api/status`, which proxies portal-api's public `GET /status`),
-a recruitment application form per department (`/departments/[slug]/
-apply`, posting to `/api/applications`, which requires a signed-in,
-linked-account session and calls portal-api's `POST /applications`), and a
-player portal (`/portal`, linked from nav only while signed in) showing
-the signed-in player's account, characters, and their own application
-statuses — fetched fresh from portal-api's `POST /portal/summary` on every
-page load, not read off the session token, so a new character or a
-reviewed application shows up without a re-login. Department pages only
-link to `/apply` when that department's `recruitmentOpen` flag
-(`lib/departments.ts`) is `true` — flip it per department once you're
-ready to accept applications; the apply route itself works regardless,
-for testing. The Phase 1 debug readout (resolved account id/staff
-flag/permissions) moved to `/debug`, not linked from nav. The admin
-dashboard is Phase 4 — see the design doc.
+**Current feature set**: public pages (landing, rules, how-to-join,
+department overview/detail), a live on-duty status board (`/status`,
+reading this app's own `/api/status`, backed by `prisma.statusSnapshot` -
+see `lib/status.ts`), a recruitment application form per department
+(`/departments/[slug]/apply`, posting to `/api/applications`, which
+requires only a signed-in session), and a player portal (`/portal`, linked
+from nav only while signed in) showing the signed-in player's own
+application statuses. Department pages only link to `/apply` when that
+department's `recruitmentOpen` flag (`lib/departments.ts`) is `true` - flip
+it per department once you're ready to accept applications; the apply
+route itself works regardless, for testing. The admin dashboard
+(`/admin/*`) covers staff roster, bans, player notes, permissions, the
+applications review queue, and a staff-action audit log - see
+`lib/adminData.ts` for all of it.
 
 ## Local setup
 
@@ -64,22 +46,19 @@ dashboard is Phase 4 — see the design doc.
    https://discord.com/developers/applications, OAuth2 tab: add redirect
    URI `http://localhost:3000/api/auth/callback/discord`, copy the Client
    ID and Client Secret.
-3. (Optional but recommended) Have `portal-api` running locally (see its
-   README) with a known `PORTAL_API_SECRET` — the site works without it,
-   but game-linked data (characters, staff status) won't resolve.
-4. Copy `.env.example` to `.env.local` and fill in `DATABASE_URL`,
-   `NEXTAUTH_SECRET` (any random string), the Discord client id/secret, and
-   `PORTAL_API_URL`/`PORTAL_API_SECRET` matching portal-api's.
-5. `pnpm install` (from repo root) — this also runs `prisma generate`.
-   Then create the website-accounts tables:
-   `pnpm --filter sfos-web exec prisma migrate deploy`.
-6. `pnpm --filter sfos-web dev` and open http://localhost:3000.
+3. Copy `.env.example` to `.env.local` and fill in `DATABASE_URL`,
+   `NEXTAUTH_SECRET` (any random string), and the Discord client id/secret.
+   Set `ADMIN_BOOTSTRAP_DISCORD_IDS` to your own Discord id so you land as
+   admin on first sign-in.
+4. `pnpm install` (from repo root) — this also runs `prisma generate`.
+   Then create the database tables:
+   `pnpm --filter sa1r-web exec prisma migrate deploy`.
+5. `pnpm --filter sa1r-web dev` and open http://localhost:3000.
 
-Signing in only resolves a real `accountId` if that Discord account has
-already connected to the FiveM server at least once (same
-`discord_identifier` linkage the main SFOS repo's `services/discord-bot`
-relies on) — otherwise you'll see "not linked" after signing in, which is
-expected, not a bug.
+For quick UI iteration without any of the above, set `DEV_BYPASS_AUTH`
+(unset/anything but `"false"` in non-production) - every page renders as a
+fixed fake signed-in admin session with zero Postgres/Discord setup. See
+`lib/session.ts`.
 
 ## Deploying to Vercel
 
@@ -90,11 +69,13 @@ expected, not a bug.
    to `web`.
 3. Set the same env vars as `.env.example` in the Vercel project settings
    (`DATABASE_URL` = your Postgres connection string, `NEXTAUTH_URL` = your
-   real production domain, `PORTAL_API_URL` = your `portal-api`'s domain
-   behind its reverse proxy — see that service's README for the Caddy
-   setup).
+   real production domain).
 4. Run `prisma migrate deploy` against that `DATABASE_URL` once (locally,
    with it set in your shell, or via a one-off Vercel build command) to
-   create the website-accounts tables before the first deploy.
+   create the tables before the first deploy.
 5. Add a second Discord OAuth redirect URI for the production domain:
    `https://<your-domain>/api/auth/callback/discord`.
+6. If the FiveM server should push live on-duty status here, set
+   `STATUS_REPORT_SECRET` and point its status-push script at
+   `https://<your-domain>/api/status/report` with that secret in the
+   `x-sa1r-status-secret` header.

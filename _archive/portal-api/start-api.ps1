@@ -34,11 +34,11 @@ if (-not (Test-Path (Join-Path $apiDir "node_modules"))) {
 
 if ($Prod) {
     Write-Host "Building portal-api..." -ForegroundColor Cyan
-    pnpm --filter sfos-portal-api build
+    pnpm --filter sa1r-portal-api build
     if (-not $?) { exit 1 }
     Write-Host "Starting portal-api (production build)..." -ForegroundColor Green
-    pnpm --filter sfos-portal-api start
+    pnpm --filter sa1r-portal-api start
 } else {
     Write-Host "Starting portal-api (dev, auto-reload)..." -ForegroundColor Green
-    pnpm --filter sfos-portal-api dev
+    pnpm --filter sa1r-portal-api dev
 }

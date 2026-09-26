@@ -233,13 +233,13 @@ export async function removeStaff(accountId: number): Promise<void> {
 }
 
 // Same cascade as sfos-admin's removeStaff handler: removing someone from
-// the roster also revokes every sfos.staff.* permission they hold, since
+// the roster also revokes every sa1r.staff.* permission they hold, since
 // clicking "Remove" almost certainly means "this person shouldn't have
-// staff access anymore." sfos.role.* permissions are untouched - being
+// staff access anymore." sa1r.role.* permissions are untouched - being
 // staff and holding an in-character department role are unrelated facts.
 export async function revokeAllStaffPermissions(accountId: number): Promise<string[]> {
   const permissions = await listPermissionsForAccount(accountId);
-  const staffPermissions = permissions.filter((row) => row.permission.startsWith("sfos.staff."));
+  const staffPermissions = permissions.filter((row) => row.permission.startsWith("sa1r.staff."));
   await Promise.all(staffPermissions.map((row) => revokePermission(accountId, row.permission)));
   return staffPermissions.map((row) => row.permission);
 }

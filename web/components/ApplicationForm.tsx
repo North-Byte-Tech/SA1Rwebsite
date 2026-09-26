@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import type { DepartmentCode } from "@/lib/portalApi";
+import type { DepartmentCode } from "@/lib/departments";
 import { buttonClasses } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 

@@ -1,4 +1,4 @@
-import type { DepartmentCode } from "@/lib/portalApi";
+export type DepartmentCode = "LEO" | "SAFD" | "SAEMS";
 
 export type DepartmentAccent = "blue" | "red" | "amber";
 

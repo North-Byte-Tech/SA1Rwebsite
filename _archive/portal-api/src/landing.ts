@@ -1,5 +1,5 @@
 // Human-facing landing page for GET / — what someone sees when they open
-// https://api.kcrp.nz/ in a browser. Deliberately public and content-free of
+// https://api.sa1r.com/ in a browser. Deliberately public and content-free of
 // anything sensitive: it names the service, confirms it's up, and lists the
 // public endpoints. Everything else stays behind the shared secret and is
 // only described, never exposed.
@@ -123,7 +123,7 @@ export function renderLandingPage(info: ServiceInfo): string {
 <main>
   <span class="${badgeClass}"><span class="dot"></span>${badgeLabel}</span>
   <h1>${escapeHtml(info.service)}</h1>
-  <p class="sub">Kiwi Cove Roleplay — game database API</p>
+  <p class="sub">San Andreas 1st Response RP — game database API</p>
 
   <dl>
     <dt>Game database</dt><dd>${dbStatus}</dd>

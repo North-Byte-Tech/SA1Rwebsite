@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import type { AccountPermissionRow, PermissionCatalogRow } from "@/lib/adminApi";
+import type { AccountPermissionRow, PermissionCatalogRow } from "@/lib/adminData";
 
 export function PermissionsEditor({
   accountId,
   catalog,
   granted,
 }: {
-  accountId: number;
+  accountId: string;
   catalog: PermissionCatalogRow[];
   granted: AccountPermissionRow[];
 }) {

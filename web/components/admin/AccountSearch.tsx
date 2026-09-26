@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
-import type { AccountSearchResult } from "@/lib/adminApi";
+import type { AccountSearchResult } from "@/lib/adminData";
 
 const INPUT_CLASSES =
   "flex-1 rounded-md border border-line bg-ink px-3 py-2 text-sm text-bone placeholder:text-muted "
@@ -46,11 +46,11 @@ export function AccountSearch() {
         <ul className="divide-y divide-line rounded-lg border border-line">
           {results.length === 0 && <li className="p-4 text-sm text-muted">No accounts found.</li>}
           {results.map((account) => (
-            <li key={account.account_id} className="flex items-center justify-between p-4 text-sm">
-              <Link href={`/admin/accounts/${account.account_id}`} className="text-bone hover:underline">
-                {account.fivem_username} <span className="text-muted">#{account.account_id}</span>
+            <li key={account.accountId} className="flex items-center justify-between p-4 text-sm">
+              <Link href={`/admin/accounts/${account.accountId}`} className="text-bone hover:underline">
+                {account.discordName ?? "unknown"} <span className="text-muted">#{account.accountId}</span>
               </Link>
-              {account.is_banned && <Badge tone="danger">Banned</Badge>}
+              {account.isBanned && <Badge tone="danger">Banned</Badge>}
             </li>
           ))}
         </ul>

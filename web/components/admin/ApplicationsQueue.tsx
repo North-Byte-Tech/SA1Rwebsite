@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { buttonClasses } from "@/components/ui/Button";
-import type { ApplicationReviewRow } from "@/lib/adminApi";
+import type { ApplicationReviewRow } from "@/lib/adminData";
 
 export function ApplicationsQueue({
   applications,
@@ -14,9 +14,9 @@ export function ApplicationsQueue({
   showActions: boolean;
 }) {
   const router = useRouter();
-  const [pending, setPending] = useState<number | null>(null);
+  const [pending, setPending] = useState<string | null>(null);
 
-  async function handleReview(id: number, status: "accepted" | "rejected") {
+  async function handleReview(id: string, status: "accepted" | "rejected") {
     setPending(id);
     try {
       await fetch(`/api/admin/applications/${id}`, {
@@ -41,9 +41,9 @@ export function ApplicationsQueue({
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="text-bone">
-                {application.department} — {application.discord_username}
+                {application.department} — {application.discordUsername}
               </p>
-              <p className="text-xs text-muted">Submitted {new Date(application.created_at).toLocaleString()}</p>
+              <p className="text-xs text-muted">Submitted {new Date(application.createdAt).toLocaleString()}</p>
             </div>
             {showActions && (
               <div className="flex gap-2">

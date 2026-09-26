@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 const START_TIME = Date.now();
 const SERVICE_VERSION = "0.1.0";
 
-// Public root - what a person sees opening https://api.kcrp.nz/ in a browser.
+// Public root - what a person sees opening https://api.sa1r.com/ in a browser.
 // Content-negotiated: a friendly HTML info page for browsers, JSON for API
 // clients that ask for it (Accept: application/json). Exposes nothing behind
 // the shared secret; it only names the public endpoints and confirms uptime.
@@ -66,7 +66,7 @@ app.get("/", async (req, res) => {
   const snapshot = getStatusSnapshot();
   const dbPing = await pingDatabase();
   const info: ServiceInfo = {
-    service: "sfos-portal-api",
+    service: "sa1r-portal-api",
     // Process is up either way; "degraded" signals it can't reach the game DB.
     status: dbPing.connected ? "online" : "degraded",
     version: SERVICE_VERSION,
@@ -80,7 +80,7 @@ app.get("/", async (req, res) => {
     endpoints: {
       public: ["GET /health", "GET /status"],
       authenticated:
-        "All other endpoints require the x-sfos-portal-secret header and are for server-to-server use only.",
+        "All other endpoints require the x-sa1r-portal-secret header and are for server-to-server use only.",
     },
   };
 
@@ -119,7 +119,7 @@ app.get("/status", (_req, res) => {
 // app's server-side code, except /status/report, which is called directly
 // by sfos-core (over the same shared-secret scheme, not a browser).
 app.use((req, res, next) => {
-  const providedSecret = req.header("x-sfos-portal-secret");
+  const providedSecret = req.header("x-sa1r-portal-secret");
   if (providedSecret !== config.portalApiSecret) {
     res.status(401).json({ ok: false, error: "unauthorized" });
     return;
@@ -158,7 +158,7 @@ app.post("/auth/resolve", async (req, res) => {
   }
 });
 
-const VALID_DEPARTMENTS: DepartmentCode[] = ["NZP", "FENZ", "HHSJ"];
+const VALID_DEPARTMENTS: DepartmentCode[] = ["LEO", "SAFD", "SAEMS"];
 
 interface ApplicationPayload {
   discordId: string;
@@ -242,10 +242,10 @@ app.post("/status/report", (req, res) => {
   res.json({ ok: true });
 });
 
-const STAFF_ADMIN_PERMISSION = "sfos.staff.admin";
+const STAFF_ADMIN_PERMISSION = "sa1r.staff.admin";
 
 // Every /admin/* route needs BOTH the shared secret (already checked above)
-// AND the acting account currently holding sfos.staff.admin - re-derived
+// AND the acting account currently holding sa1r.staff.admin - re-derived
 // from the DB on every request, never trusted from a session token, since
 // a permission could have been revoked since that token was issued. Mirrors
 // the main SFOS repo's sfos-admin RequireAdmin check exactly (minus its ACE-
@@ -256,7 +256,7 @@ const STAFF_ADMIN_PERMISSION = "sfos.staff.admin";
 const adminRouter = express.Router();
 
 adminRouter.use(async (req, res, next) => {
-  const actorAccountId = Number(req.header("x-sfos-actor-account-id"));
+  const actorAccountId = Number(req.header("x-sa1r-actor-account-id"));
   if (!Number.isInteger(actorAccountId)) {
     res.status(400).json({ ok: false, error: "missing_actor" });
     return;

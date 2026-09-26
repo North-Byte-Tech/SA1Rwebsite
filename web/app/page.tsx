@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
+import { getSession } from "@/lib/session";
 import { Compass, Flame, HeartPulse, MapPin, Radio, ScrollText, Shield, ShieldCheck } from "lucide-react";
-import { authOptions } from "@/lib/auth";
 import { buttonClasses } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { IconTile, type IconTileTone } from "@/components/ui/IconTile";
 import { Pill } from "@/components/ui/Pill";
 import { GetStartedButton } from "@/components/GetStartedButton";
-import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES } from "@/lib/departments";
-import type { DepartmentCode } from "@/lib/portalApi";
+import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,
@@ -48,7 +46,7 @@ const QUICK_LINKS = [
 ] satisfies { href: string; title: string; body: string; icon: typeof Compass; tone: IconTileTone }[];
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
 
   return (
     <div className="space-y-20">

@@ -1,15 +1,18 @@
-import type { PortalCharacter } from "@/lib/portalApi";
+// The `export {}` below is required: without at least one top-level
+// import/export, this file is a global script, not a module, and
+// `declare module "next-auth"` would then define a brand new ambient
+// module that REPLACES next-auth's real types instead of augmenting them.
+export {};
 
-// Augments next-auth's Session/User with the portal-api /auth/resolve
-// result cached on the Prisma User row - see lib/auth.ts's events.signIn
-// (where it's written) and session callback (where it's read back).
+// Augments next-auth's Session/User with the site-admin state stored on the
+// Prisma User row - see lib/auth.ts's session callback (where it's read)
+// and lib/adminData.ts (where it's written, via the admin UI).
 declare module "next-auth" {
   interface Session {
     discordId: string | null;
-    accountId: number | null;
+    userId: string;
     permissions: string[];
     isStaff: boolean;
-    characters: PortalCharacter[];
   }
 
   // The database session strategy's session() callback receives an
@@ -18,9 +21,7 @@ declare module "next-auth" {
   // lib/auth.ts without an `any` cast.
   interface User {
     discordId?: string | null;
-    gameAccountId?: number | null;
     isStaff?: boolean;
     permissions?: string[];
-    characters?: unknown;
   }
 }

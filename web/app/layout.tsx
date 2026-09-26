@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Oswald } from "next/font/google";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { getSession, DEV_AUTH_BYPASSED } from "@/lib/session";
 import { AuthButton } from "@/components/AuthButton";
 import { STAFF_ADMIN_PERMISSION } from "@/lib/requireAdmin";
 import "./globals.css";
@@ -45,11 +44,16 @@ const FOOTER_SECTIONS = [
 ] as const;
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
 
   return (
     <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
+        {DEV_AUTH_BYPASSED && (
+          <div className="bg-amber-500/90 px-4 py-1.5 text-center text-xs font-medium text-black">
+            Dev mode: signed in as a fake session (DEV_BYPASS_AUTH). Set DEV_BYPASS_AUTH=false to use real Discord sign-in.
+          </div>
+        )}
         <header className="sticky top-0 z-10 border-b border-line/80 bg-ink/85 backdrop-blur-md">
           <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center gap-3">

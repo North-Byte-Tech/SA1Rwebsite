@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { submitDepartmentApplication, type DepartmentCode } from "@/lib/portalApi";
+import { getSession } from "@/lib/session";
+import { submitDepartmentApplication } from "@/lib/applications";
+import type { DepartmentCode } from "@/lib/departments";
 
 const VALID_DEPARTMENTS: DepartmentCode[] = ["LEO", "SAFD", "SAEMS"];
 
@@ -24,8 +24,8 @@ function isValidBody(body: unknown): body is ApplicationRequestBody {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session || session.accountId === null || !session.discordId) {
+  const session = await getSession();
+  if (!session || !session.discordId) {
     return NextResponse.json({ ok: false, error: "unauthenticated" }, { status: 401 });
   }
 
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[sfos-web] /api/applications failed:", err);
+    console.error("[sa1r-web] /api/applications failed:", err);
     return NextResponse.json({ ok: false, error: "internal_error" }, { status: 500 });
   }
 }

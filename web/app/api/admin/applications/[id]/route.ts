@@ -1,24 +1,24 @@
 import { NextResponse } from "next/server";
 import { requireAdminActor } from "@/lib/requireAdmin";
-import { updateApplicationStatus } from "@/lib/adminApi";
+import { updateApplicationStatus } from "@/lib/adminData";
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
-  const actorAccountId = await requireAdminActor();
-  if (actorAccountId === null) {
+  const actor = await requireAdminActor();
+  if (actor === null) {
     return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
   }
 
-  const id = Number(params.id);
   const body = await request.json().catch(() => null);
   const status = body?.status;
-  if (!Number.isInteger(id) || (status !== "accepted" && status !== "rejected")) {
+  if (status !== "accepted" && status !== "rejected") {
     return NextResponse.json({ ok: false, error: "invalid_payload" }, { status: 400 });
   }
 
   try {
-    return NextResponse.json(await updateApplicationStatus(actorAccountId, id, status));
+    await updateApplicationStatus(actor, params.id, status);
+    return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[sfos-web] /api/admin/applications/[id] failed:", err);
-    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 502 });
+    console.error("[sa1r-web] /api/admin/applications/[id] failed:", err);
+    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 500 });
   }
 }

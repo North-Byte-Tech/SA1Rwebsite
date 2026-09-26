@@ -8,8 +8,8 @@ web/.next/
 web/out/
 web/tsconfig.tsbuildinfo
 
-# portal-api build output
-portal-api/dist/
+# _archive/portal-api build output (retired service, kept for reference only)
+_archive/portal-api/dist/
 
 # logs
 npm-debug.log*

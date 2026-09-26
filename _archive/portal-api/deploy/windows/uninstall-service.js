@@ -1,4 +1,4 @@
-// Removes the sfos-portal-api Windows Service installed by
+// Removes the sa1r-portal-api Windows Service installed by
 // install-service.js. Run once, elevated:
 //   node portal-api/deploy/windows/uninstall-service.js
 import { fileURLToPath } from "node:url";
@@ -11,12 +11,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const apiDir = join(__dirname, "..", "..");
 
 const svc = new Service({
-  name: "sfos-portal-api",
+  name: "sa1r-portal-api",
   script: join(apiDir, "dist", "index.js"),
 });
 
 svc.on("uninstall", () => {
-  console.log("sfos-portal-api service uninstalled.");
+  console.log("sa1r-portal-api service uninstalled.");
 });
 
 svc.uninstall();

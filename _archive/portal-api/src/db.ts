@@ -97,7 +97,7 @@ export async function isStaff(accountId: number): Promise<boolean> {
   return rows.length > 0;
 }
 
-// Used to gate every /admin/* route on sfos.staff.admin specifically - not
+// Used to gate every /admin/* route on sa1r.staff.admin specifically - not
 // staff_members roster membership (isStaff above), which is separate
 // metadata (title/notes) and doesn't itself grant access. Mirrors
 // sfos-admin's RequireAdmin DB check (server/main.lua) exactly, minus the
@@ -110,7 +110,7 @@ export async function hasPermission(accountId: number, permission: string): Prom
   return rows.length > 0;
 }
 
-export type DepartmentCode = "NZP" | "FENZ" | "HHSJ";
+export type DepartmentCode = "LEO" | "SAFD" | "SAEMS";
 
 export interface DepartmentApplicationInput {
   discordId: string;

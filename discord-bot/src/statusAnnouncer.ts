@@ -4,18 +4,18 @@ import { debugLog } from "./debug.js";
 
 // Marker put in the embed footer so we can find and re-use our own status
 // message across bot restarts instead of posting a fresh one every time.
-const BOARD_MARKER = "sfos-status-board";
+const BOARD_MARKER = "sa1r-status-board";
 
 interface StatusResponse {
   data: unknown;
   updatedAt: string | null;
 }
 
-// The bot polls portal-api's PUBLIC GET /status (no shared secret) and keeps
-// a single channel message up to date. Fully decoupled from portal-api - if
-// portal-api is unreachable, we just leave the last message as-is and retry
-// on the next tick. Started only when both DISCORD_STATUS_CHANNEL_ID and
-// PORTAL_API_URL are set (see index.ts).
+// The bot polls the web app's PUBLIC GET /api/status (no shared secret) and
+// keeps a single channel message up to date. If the website is unreachable,
+// we just leave the last message as-is and retry on the next tick. Started
+// only when both DISCORD_STATUS_CHANNEL_ID and WEB_BASE_URL are set (see
+// index.ts).
 export function startStatusAnnouncer(client: Client): void {
   let boardMessage: Message | null = null;
   let lastRenderedAt: string | null = null;
@@ -23,15 +23,15 @@ export function startStatusAnnouncer(client: Client): void {
   async function tick(): Promise<void> {
     let status: StatusResponse;
     try {
-      const resp = await fetch(`${config.status.portalApiUrl.replace(/\/$/, "")}/status`);
+      const resp = await fetch(`${config.status.webBaseUrl.replace(/\/$/, "")}/api/status`);
       if (!resp.ok) {
-        debugLog("status", `portal-api /status responded ${resp.status}`);
+        debugLog("status", `web /api/status responded ${resp.status}`);
         return;
       }
       status = (await resp.json()) as StatusResponse;
     } catch (err) {
-      // portal-api down/unreachable - leave the existing board untouched.
-      debugLog("status", `could not reach portal-api /status: ${String(err)}`);
+      // Website down/unreachable - leave the existing board untouched.
+      debugLog("status", `could not reach web /api/status: ${String(err)}`);
       return;
     }
 
@@ -64,7 +64,7 @@ export function startStatusAnnouncer(client: Client): void {
   void tick();
   setInterval(() => void tick(), Math.max(15, config.status.pollSeconds) * 1000);
   console.log(
-    `[sfos-discord-bot] status board polling portal-api every ${config.status.pollSeconds}s -> channel ${config.status.channelId}`,
+    `[sa1r-discord-bot] status board polling web every ${config.status.pollSeconds}s -> channel ${config.status.channelId}`,
   );
 }
 
@@ -100,7 +100,7 @@ function buildStatusEmbed(status: StatusResponse): APIEmbed {
 }
 
 // The /status payload shape is whatever the Lua GetOnDutyCounts() returns -
-// portal-api stores and echoes it as-is (see its statusStore.ts), so render
+// the website stores and echoes it as-is (see web/lib/status.ts), so render
 // defensively rather than assuming a fixed schema. Flat objects become one
 // field per key; anything else is stringified into a single field.
 function renderFields(data: unknown): APIEmbedField[] {

@@ -8,7 +8,7 @@ const INPUT_CLASSES =
   "flex-1 rounded-md border border-line bg-ink px-3 py-2 text-sm text-bone placeholder:text-muted "
   + "focus:border-trooper-500 focus:outline-none focus:ring-1 focus:ring-trooper-500";
 
-export function BanControls({ accountId, isBanned }: { accountId: number; isBanned: boolean }) {
+export function BanControls({ accountId, isBanned }: { accountId: string; isBanned: boolean }) {
   const router = useRouter();
   const [reason, setReason] = useState("");
   const [pending, setPending] = useState(false);

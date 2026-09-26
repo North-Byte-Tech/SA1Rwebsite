@@ -17,8 +17,7 @@ export function AppointStaffForm() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const parsedId = Number(accountId);
-    if (!Number.isInteger(parsedId) || title.trim().length === 0) {
+    if (accountId.trim().length === 0 || title.trim().length === 0) {
       return;
     }
     setPending(true);
@@ -26,7 +25,7 @@ export function AppointStaffForm() {
       await fetch("/api/admin/staff", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ accountId: parsedId, title, notes: notes || null }),
+        body: JSON.stringify({ accountId: accountId.trim(), title, notes: notes || null }),
       });
       setAccountId("");
       setTitle("");

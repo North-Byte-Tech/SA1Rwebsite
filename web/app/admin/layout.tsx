@@ -11,13 +11,11 @@ const ADMIN_NAV = [
   { href: "/admin/audit-log", label: "Audit Log" },
 ] as const;
 
-// Session-level gate (fast path) - see lib/requireAdmin.ts. The
-// authoritative check is portal-api's /admin/* router re-deriving
-// sfos.staff.admin from the DB on every single request underneath this.
+// The one admin gate - see lib/requireAdmin.ts.
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const actorAccountId = await requireAdminActor();
+  const actor = await requireAdminActor();
 
-  if (actorAccountId === null) {
+  if (actor === null) {
     return (
       <Card className="mx-auto max-w-md text-center text-sm text-muted">
         You don&apos;t have access to the admin dashboard.

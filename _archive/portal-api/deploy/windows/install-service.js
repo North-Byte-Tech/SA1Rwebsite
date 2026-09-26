@@ -8,7 +8,7 @@
 // break running portal-api anywhere else.
 //
 // Run once, from an elevated (Administrator) PowerShell or cmd, after
-// `pnpm install` and `pnpm --filter sfos-portal-api build`:
+// `pnpm install` and `pnpm --filter sa1r-portal-api build`:
 //   node portal-api/deploy/windows/install-service.js
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -20,8 +20,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const apiDir = join(__dirname, "..", "..");
 
 const svc = new Service({
-  name: "sfos-portal-api",
-  description: "Southern Frontier OS Portal API",
+  name: "sa1r-portal-api",
+  description: "SA1R Portal API",
   script: join(apiDir, "dist", "index.js"),
   workingDirectory: apiDir,
   // dist/index.js loads its own .env via dotenv/config (see src/config.ts)
@@ -30,17 +30,17 @@ const svc = new Service({
 });
 
 svc.on("install", () => {
-  console.log("sfos-portal-api service installed. Starting...");
+  console.log("sa1r-portal-api service installed. Starting...");
   svc.start();
 });
 
 svc.on("alreadyinstalled", () => {
-  console.log("sfos-portal-api service is already installed.");
+  console.log("sa1r-portal-api service is already installed.");
 });
 
 svc.on("start", () => {
-  console.log("sfos-portal-api service started.");
-  console.log("Manage it from services.msc, or: net start/stop sfos-portal-api");
+  console.log("sa1r-portal-api service started.");
+  console.log("Manage it from services.msc, or: net start/stop sa1r-portal-api");
 });
 
 svc.on("error", (err) => {

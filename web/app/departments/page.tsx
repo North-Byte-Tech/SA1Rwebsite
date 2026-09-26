@@ -3,8 +3,7 @@ import { Flame, HeartPulse, Shield } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES } from "@/lib/departments";
-import type { DepartmentCode } from "@/lib/portalApi";
+import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,

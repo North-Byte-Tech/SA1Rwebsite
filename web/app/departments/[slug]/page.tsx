@@ -4,8 +4,7 @@ import { Flame, HeartPulse, Shield } from "lucide-react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, slugifyAgency } from "@/lib/departments";
-import type { DepartmentCode } from "@/lib/portalApi";
+import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, slugifyAgency, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,

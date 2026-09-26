@@ -1,23 +1,23 @@
 import { NextResponse } from "next/server";
 import { requireAdminActor } from "@/lib/requireAdmin";
-import { banAccount, listBans } from "@/lib/adminApi";
+import { banAccount, listBans } from "@/lib/adminData";
 
 export async function GET() {
-  const actorAccountId = await requireAdminActor();
-  if (actorAccountId === null) {
+  const actor = await requireAdminActor();
+  if (actor === null) {
     return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
   }
 
   try {
-    return NextResponse.json(await listBans(actorAccountId));
+    return NextResponse.json(await listBans());
   } catch (err) {
-    console.error("[sfos-web] /api/admin/bans GET failed:", err);
-    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 502 });
+    console.error("[sa1r-web] /api/admin/bans GET failed:", err);
+    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 500 });
   }
 }
 
 interface BanRequestBody {
-  accountId: number;
+  accountId: string;
   reason: string;
   expiresAt: string | null;
 }
@@ -27,12 +27,12 @@ function isValidBody(body: unknown): body is BanRequestBody {
     return false;
   }
   const candidate = body as Partial<BanRequestBody>;
-  return typeof candidate.accountId === "number" && typeof candidate.reason === "string" && candidate.reason.length > 0;
+  return typeof candidate.accountId === "string" && typeof candidate.reason === "string" && candidate.reason.length > 0;
 }
 
 export async function POST(request: Request) {
-  const actorAccountId = await requireAdminActor();
-  if (actorAccountId === null) {
+  const actor = await requireAdminActor();
+  if (actor === null) {
     return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 });
   }
 
@@ -42,10 +42,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    await banAccount(actorAccountId, { accountId: body.accountId, reason: body.reason, expiresAt: body.expiresAt ?? null });
+    await banAccount(actor, { accountId: body.accountId, reason: body.reason, expiresAt: body.expiresAt ?? null });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[sfos-web] /api/admin/bans POST failed:", err);
-    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 502 });
+    console.error("[sa1r-web] /api/admin/bans POST failed:", err);
+    return NextResponse.json({ ok: false, error: "internal_error" }, { status: 500 });
   }
 }

@@ -2,25 +2,24 @@ import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
 // Mirrors sfos-core/shared/constants.lua's fixed V1 permission catalog.
 // Kept as fixed choices (not free text) to avoid typo'd permission strings
-// granted from Discord ever reaching the database. Fictional agency names
-// (Southern Frontier is this platform's own in-universe region), matching
+// granted from Discord ever reaching the database. Agency names match
 // database/migrations/0003_agencies.sql's seed.
 const PERMISSION_CHOICES = [
-  { name: "Aotearoa Police", value: "sfos.role.police" },
-  { name: "Aotearoa Fire & Rescue", value: "sfos.role.fire" },
-  { name: "Aotearoa Ambulance", value: "sfos.role.stjohn" },
-  { name: "Aotearoa Corrections", value: "sfos.role.corrections" },
-  { name: "Aotearoa Emergency Management", value: "sfos.role.civildefence" },
-  { name: "Staff: Agency HR (hire/fire/promote)", value: "sfos.staff.hr" },
-  { name: "Staff: Vehicles (givevehicle)", value: "sfos.staff.vehicles" },
-  { name: "Staff: AOP / Priority (/aop, /priority staff actions)", value: "sfos.staff.aop" },
-  { name: "Staff: Admin Menu (permissions, AOP, player actions, catalogs)", value: "sfos.staff.admin" },
+  { name: "LEO", value: "sa1r.role.police" },
+  { name: "Fire & Rescue (SAFD)", value: "sa1r.role.fire" },
+  { name: "EMS", value: "sa1r.role.stjohn" },
+  { name: "Corrections", value: "sa1r.role.corrections" },
+  { name: "Emergency Management", value: "sa1r.role.civildefence" },
+  { name: "Staff: Agency HR (hire/fire/promote)", value: "sa1r.staff.hr" },
+  { name: "Staff: Vehicles (givevehicle)", value: "sa1r.staff.vehicles" },
+  { name: "Staff: AOP / Priority (/aop, /priority staff actions)", value: "sa1r.staff.aop" },
+  { name: "Staff: Admin Menu (permissions, AOP, player actions, catalogs)", value: "sa1r.staff.admin" },
 ];
 
 export const commands = [
   new SlashCommandBuilder()
     .setName("grant-permission")
-    .setDescription("Grant a Southern Frontier role permission to a linked player")
+    .setDescription("Grant a San Andreas role permission to a linked player")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addUserOption((option) => option.setName("player").setDescription("The Discord user").setRequired(true))
     .addStringOption((option) =>
@@ -33,7 +32,7 @@ export const commands = [
     .toJSON(),
   new SlashCommandBuilder()
     .setName("revoke-permission")
-    .setDescription("Revoke a Southern Frontier role permission from a linked player")
+    .setDescription("Revoke a San Andreas role permission from a linked player")
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addUserOption((option) => option.setName("player").setDescription("The Discord user").setRequired(true))
     .addStringOption((option) =>

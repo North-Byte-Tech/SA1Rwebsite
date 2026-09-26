@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
-export type IconTileTone = "moss" | "sand" | "gold";
+export type IconTileTone = "trooper" | "steel" | "gold";
 
 const TONES: Record<IconTileTone, string> = {
-  moss: "bg-gradient-to-br from-moss-500 to-moss-700 text-ink",
-  sand: "bg-gradient-to-br from-sand-300 to-sand-600 text-ink",
+  trooper: "bg-gradient-to-br from-trooper-500 to-trooper-700 text-ink",
+  steel: "bg-gradient-to-br from-steel-300 to-steel-600 text-ink",
   gold: "bg-gradient-to-br from-gold-400 to-gold-600 text-ink",
 };
 
@@ -12,7 +12,7 @@ const TONES: Record<IconTileTone, string> = {
 // across feature/department cards.
 export function IconTile({
   children,
-  tone = "moss",
+  tone = "trooper",
   className = "",
 }: {
   children: ReactNode;

@@ -1,10 +1,9 @@
 import type { Config } from "tailwindcss";
 
-// Palette pulled from the Kiwi Cove Roleplay crest: near-black shield,
-// cream/khaki border, moss-green rule lines and "ROLEPLAY" text, bone-white
-// "KIWI COVE" lettering and kiwi silhouette. `gold` is a kauri-amber accent
-// added alongside it purely so gradients/highlights have a second stop -
-// same crest mood, just enough contrast for glow effects and gradient text.
+// Palette for San Andreas 1st Response RP: near-black base, steel-blue
+// trooper accent (patrol lightbar / uniform blue), cool steel-grey rule
+// lines, and a badge-gold accent so gradients/highlights have a second
+// stop - a highway-patrol/emergency-services mood instead of a nature one.
 export default {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
@@ -21,18 +20,18 @@ export default {
           raised: "#1c1f15",
         },
         line: "#2a2c1f",
-        moss: {
-          DEFAULT: "#7c8f4a",
-          300: "#aebd82",
-          400: "#96a866",
-          500: "#7c8f4a",
-          600: "#67793a",
-          700: "#526030",
+        trooper: {
+          DEFAULT: "#3b6ea5",
+          300: "#9dc2e8",
+          400: "#6ba0d6",
+          500: "#3b6ea5",
+          600: "#2f5788",
+          700: "#24436a",
         },
-        sand: {
-          DEFAULT: "#d9cfa8",
-          300: "#e7e0c4",
-          600: "#b8ac80",
+        steel: {
+          DEFAULT: "#c7d2e0",
+          300: "#dbe3ee",
+          600: "#96a7bd",
         },
         gold: {
           DEFAULT: "#c9a53b",
@@ -49,16 +48,17 @@ export default {
         sans: ["var(--font-sans)"],
       },
       backgroundImage: {
-        "radial-fade": "radial-gradient(circle at top, rgba(124,143,74,0.16), transparent 60%)",
+        "radial-fade": "radial-gradient(circle at top, rgba(59,110,165,0.16), transparent 60%)",
         "hero-glow":
-          "radial-gradient(circle at 20% 0%, rgba(124,143,74,0.22), transparent 55%), "
-          + "radial-gradient(circle at 85% 15%, rgba(201,165,59,0.14), transparent 45%)",
-        "gradient-brand": "linear-gradient(90deg, #96a866 0%, #d9cfa8 55%, #d3b654 100%)",
-        "gradient-primary": "linear-gradient(135deg, #7c8f4a 0%, #67793a 100%)",
+          "radial-gradient(circle at 20% 0%, rgba(59,110,165,0.22), transparent 55%), "
+          + "radial-gradient(circle at 85% 15%, rgba(201,165,59,0.14), transparent 45%), "
+          + "radial-gradient(circle at 50% 100%, rgba(178,58,58,0.1), transparent 50%)",
+        "gradient-brand": "linear-gradient(90deg, #6ba0d6 0%, #c7d2e0 55%, #d3b654 100%)",
+        "gradient-primary": "linear-gradient(135deg, #3b6ea5 0%, #2f5788 100%)",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(124,143,74,0.4), 0 8px 30px -8px rgba(124,143,74,0.55)",
-        "glow-sm": "0 0 0 1px rgba(124,143,74,0.35), 0 4px 16px -6px rgba(124,143,74,0.5)",
+        glow: "0 0 0 1px rgba(59,110,165,0.4), 0 8px 30px -8px rgba(59,110,165,0.55)",
+        "glow-sm": "0 0 0 1px rgba(59,110,165,0.35), 0 4px 16px -6px rgba(59,110,165,0.5)",
         card: "0 8px 30px -12px rgba(0,0,0,0.6)",
       },
     },

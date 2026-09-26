@@ -47,7 +47,7 @@ export async function resolvePortalSession(discordId: string): Promise<PortalSes
   return (await res.json()) as PortalSession;
 }
 
-export type DepartmentCode = "NZP" | "FENZ" | "HHSJ";
+export type DepartmentCode = "LEO" | "SAFD" | "SAEMS";
 
 export interface DepartmentApplicationInput {
   discordId: string;

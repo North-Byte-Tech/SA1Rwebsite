@@ -19,7 +19,7 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 
 const TEXTAREA_CLASSES =
   "mt-1.5 w-full rounded-md border border-line bg-ink px-3 py-2 text-sm text-bone placeholder:text-muted "
-  + "focus:border-moss-500 focus:outline-none focus:ring-1 focus:ring-moss-500";
+  + "focus:border-trooper-500 focus:outline-none focus:ring-1 focus:ring-trooper-500";
 
 export function ApplicationForm({ departmentCode }: { departmentCode: DepartmentCode }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});

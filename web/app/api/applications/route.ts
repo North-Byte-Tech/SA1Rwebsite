@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { submitDepartmentApplication, type DepartmentCode } from "@/lib/portalApi";
 
-const VALID_DEPARTMENTS: DepartmentCode[] = ["NZP", "FENZ", "HHSJ"];
+const VALID_DEPARTMENTS: DepartmentCode[] = ["LEO", "SAFD", "SAEMS"];
 
 interface ApplicationRequestBody {
   department: DepartmentCode;

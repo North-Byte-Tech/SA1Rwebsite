@@ -34,7 +34,7 @@ export default async function AdminApplicationsPage({ searchParams }: { searchPa
           <Link
             key={tab.status}
             href={`/admin/applications?status=${tab.status}`}
-            className={tab.status === status ? "font-semibold text-moss-400" : "text-muted hover:text-bone"}
+            className={tab.status === status ? "font-semibold text-trooper-400" : "text-muted hover:text-bone"}
           >
             {tab.label}
           </Link>

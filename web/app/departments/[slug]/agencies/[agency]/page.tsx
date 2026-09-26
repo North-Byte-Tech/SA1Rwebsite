@@ -1,49 +1,41 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Flame, HeartPulse, Shield } from "lucide-react";
-import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, slugifyAgency } from "@/lib/departments";
-import type { DepartmentCode } from "@/lib/portalApi";
+import { buttonClasses } from "@/components/ui/Button";
+import { DEPARTMENT_ACCENT_CLASSES, getAgencyBySlug, getDepartmentBySlug } from "@/lib/departments";
 
-const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
-  LEO: Shield,
-  SAFD: Flame,
-  SAEMS: HeartPulse,
-};
-
-export default function DepartmentPage({ params }: { params: { slug: string } }) {
+export default function AgencyPage({ params }: { params: { slug: string; agency: string } }) {
   const department = getDepartmentBySlug(params.slug);
   if (!department) {
     notFound();
   }
 
+  const agency = getAgencyBySlug(department, params.agency);
+  if (!agency) {
+    notFound();
+  }
+
   const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
-  const Icon = DEPARTMENT_ICONS[department.code];
 
   return (
     <div className="space-y-8">
+      <Link href={`/departments/${department.slug}`} className="text-sm text-muted hover:text-bone hover:underline">
+        ← {department.name}
+      </Link>
+
       <header className="space-y-4">
-        <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
-          <Icon className="h-7 w-7" />
-        </div>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl text-bone">{department.name}</h1>
+          <h1 className="text-3xl text-bone">{agency.name}</h1>
+          <Badge tone="neutral">{agency.heading.replace(/ Agencies$/, "")}</Badge>
           <Badge tone={department.recruitmentOpen ? "success" : "neutral"}>
             {department.recruitmentOpen ? "Recruiting" : "Closed"}
           </Badge>
         </div>
-        <p className="text-muted">{department.summary}</p>
+        <p className="text-muted">
+          One of the agencies recruited through {department.name} - {department.summary}
+        </p>
       </header>
-
-      <ul className="grid gap-3 sm:grid-cols-3">
-        {department.features.map((feature) => (
-          <li key={feature} className={`rounded-xl border border-line bg-surface px-4 py-3 text-sm ${accent.text}`}>
-            {feature}
-          </li>
-        ))}
-      </ul>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Card>
@@ -71,29 +63,6 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
           </ul>
         </Card>
       </div>
-
-      {department.agencyGroups && (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {department.agencyGroups.map((group) => (
-            <Card key={group.heading}>
-              <h2 className="text-lg text-bone">{group.heading}</h2>
-              <ul className="mt-3 space-y-2 text-sm text-muted">
-                {group.agencies.map((agency) => (
-                  <li key={agency} className="flex items-start gap-2">
-                    <span className={accent.text}>›</span>
-                    <Link
-                      href={`/departments/${department.slug}/agencies/${slugifyAgency(agency)}`}
-                      className="hover:text-bone hover:underline"
-                    >
-                      {agency}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-        </div>
-      )}
 
       {department.recruitmentOpen ? (
         <Link href={`/departments/${department.slug}/apply`} className={buttonClasses("primary")}>

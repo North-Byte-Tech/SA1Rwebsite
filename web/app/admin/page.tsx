@@ -36,7 +36,7 @@ export default async function AdminOverviewPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           {stats.map((stat) => (
             <Link key={stat.label} href={stat.href}>
-              <Card className="text-center transition-colors hover:border-moss-600/60">
+              <Card className="text-center transition-colors hover:border-trooper-600/60">
                 <p className="text-3xl text-bone">{stat.value}</p>
                 <p className="mt-1 text-sm text-muted">{stat.label}</p>
               </Card>

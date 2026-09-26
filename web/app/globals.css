@@ -17,7 +17,7 @@ h3 {
 }
 
 ::selection {
-  @apply bg-moss-600 text-ink;
+  @apply bg-trooper-600 text-ink;
 }
 
 @layer utilities {

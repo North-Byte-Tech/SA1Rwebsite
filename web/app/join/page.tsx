@@ -27,7 +27,7 @@ export default function JoinPage() {
       </ol>
       <p className="text-sm text-muted">
         Interested in an emergency-services role? See{" "}
-        <Link href="/departments" className="text-moss-400 hover:underline">
+        <Link href="/departments" className="text-trooper-400 hover:underline">
           Departments
         </Link>
         .

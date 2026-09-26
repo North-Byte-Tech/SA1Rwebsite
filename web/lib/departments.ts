@@ -19,29 +19,67 @@ export interface DepartmentInfo {
   // launch, same as rules/page.tsx's RULE_SECTIONS.
   ranks: string[];
   requirements: string[];
+  // Optional grouped roster of real in-universe agencies this one
+  // recruitment page stands in for (e.g. LEO covers many state/local
+  // agencies through a single application) - rendered on the department
+  // detail page when present.
+  agencyGroups?: { heading: string; agencies: string[] }[];
 }
 
 export const DEPARTMENTS: DepartmentInfo[] = [
   {
-    code: "NZP",
-    slug: "nzp",
-    name: "New Zealand Police",
-    summary: "Frontline patrol, investigations, and the AOS.",
-    features: ["Patrol & investigations", "AOS tactical response", "Structured rank progression"],
+    code: "LEO",
+    slug: "leo",
+    name: "Law Enforcement (LEO)",
+    summary: "One recruitment page covering all of San Andreas' law enforcement agencies - patrol, investigations, and tactical response.",
+    features: ["Multiple LEO agencies, one application", "Patrol & investigations", "Structured rank progression"],
     accent: "blue",
     recruitmentOpen: false,
-    ranks: ["Recruit Constable", "Constable", "Senior Constable", "Sergeant", "Senior Sergeant", "Inspector"],
+    ranks: ["Recruit Officer", "Officer", "Senior Officer", "Sergeant", "Senior Sergeant", "Inspector"],
     requirements: [
       "Linked Discord and FiveM account in good standing",
       "Clean in-character record for at least 7 days",
       "Comfortable with radio codes and basic RP procedure",
       "Available for at least one shift per week once appointed",
     ],
+    agencyGroups: [
+      {
+        heading: "State Agencies",
+        agencies: [
+          "San Andreas District Court",
+          "SA Attorney General's Office",
+          "SA Dept of Law Enforcement (SADLE)",
+          "SADLE Criminal Investigation Division",
+          "SADLE State Trooper",
+          "SADLE State Emergency Response Team",
+          "SADLE Dept of Coroner",
+          "San Andreas Department of Public Safety (SADPS)",
+          "SADPS Dept of Revenue",
+          "SADPS State Trooper Division",
+          "San Andreas Department of Transportation",
+          "San Andreas State Prison Authority",
+          "State Constable Division",
+          "State Game Warden Division",
+          "State Ranger Division",
+        ],
+      },
+      {
+        heading: "Local Agencies",
+        agencies: [
+          "Blaine County Sheriff's Office",
+          "Senora Valley Police Department",
+          "Paleto Bay Police Department",
+          "Grapeseed Township Police Department",
+          "Los Santos Sheriff's Department",
+          "Los Santos Police Department",
+        ],
+      },
+    ],
   },
   {
-    code: "FENZ",
-    slug: "fenz",
-    name: "Fire and Emergency New Zealand",
+    code: "SAFD",
+    slug: "safd",
+    name: "San Andreas Fire & Rescue Services (SAFD)",
     summary: "Structure fires, road crash rescue, and hazmat response.",
     features: ["Structure fire response", "Road crash rescue", "Hazmat & rescue ops"],
     accent: "red",
@@ -50,14 +88,14 @@ export const DEPARTMENTS: DepartmentInfo[] = [
     requirements: [
       "Linked Discord and FiveM account in good standing",
       "Willingness to train on apparatus and rescue tools in-character",
-      "Comfortable working alongside Police and St John on scene",
+      "Comfortable working alongside Police and EMS on scene",
       "Available for at least one shift per week once appointed",
     ],
   },
   {
-    code: "HHSJ",
-    slug: "hhsj",
-    name: "Hato Hone St John",
+    code: "SAEMS",
+    slug: "saems",
+    name: "San Andreas Emergency Medical Services",
     summary: "Ambulance and emergency medical response.",
     features: ["Emergency medical response", "Ambulance operations", "Hospital & triage RP"],
     accent: "amber",
@@ -74,6 +112,30 @@ export const DEPARTMENTS: DepartmentInfo[] = [
 
 export function getDepartmentBySlug(slug: string): DepartmentInfo | undefined {
   return DEPARTMENTS.find((department) => department.slug === slug);
+}
+
+export function slugifyAgency(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[()']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export interface AgencyInfo {
+  heading: string;
+  name: string;
+  slug: string;
+}
+
+export function getAgencyBySlug(department: DepartmentInfo, agencySlug: string): AgencyInfo | undefined {
+  for (const group of department.agencyGroups ?? []) {
+    const match = group.agencies.find((agency) => slugifyAgency(agency) === agencySlug);
+    if (match) {
+      return { heading: group.heading, name: match, slug: agencySlug };
+    }
+  }
+  return undefined;
 }
 
 // Full class strings (not built via template interpolation) so Tailwind's

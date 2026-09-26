@@ -12,8 +12,8 @@ const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const display = Oswald({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
 
 export const metadata: Metadata = {
-  title: "Kiwi Cove Roleplay",
-  description: "Kiwi Cove Roleplay - community, recruitment, and player portal.",
+  title: "San Andreas 1st Response RP",
+  description: "San Andreas 1st Response RP - community, recruitment, and player portal.",
 };
 
 const NAV_LINKS = [
@@ -54,7 +54,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 sm:px-6 lg:px-8">
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="Kiwi Cove Roleplay" className="h-12 w-auto drop-shadow-[0_0_12px_rgba(124,143,74,0.35)]" />
+              <img src="/logo.png" alt="San Andreas 1st Response RP" className="h-12 w-auto drop-shadow-[0_0_12px_rgba(59,110,165,0.35)]" />
             </Link>
             <nav className="flex flex-1 flex-wrap items-center gap-x-1 gap-y-2 text-sm">
               {NAV_LINKS.map((link) => (
@@ -93,14 +93,15 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <div className="mx-auto grid w-full max-w-5xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
             <div className="space-y-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="Kiwi Cove Roleplay" className="h-14 w-auto" />
+              <img src="/logo.png" alt="San Andreas 1st Response RP" className="h-14 w-auto" />
               <p className="max-w-xs text-sm text-muted">
-                A New Zealand-based FiveM roleplay community, set in Ōtautahi Christchurch.
+                An immersive FiveM roleplay community focused on law enforcement and emergency response across the
+                State of San Andreas.
               </p>
             </div>
             {FOOTER_SECTIONS.map((section) => (
               <div key={section.heading} className="space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-sand">{section.heading}</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-steel">{section.heading}</h3>
                 <ul className="space-y-2 text-sm">
                   {section.links.map((link) => (
                     <li key={link.label}>
@@ -115,7 +116,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </div>
           <div className="border-t border-line/60">
             <div className="mx-auto w-full max-w-5xl px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
-              © {new Date().getFullYear()} Kiwi Cove Roleplay — Ōtautahi Christchurch, NZ FiveM roleplay community.
+              <p>© {new Date().getFullYear()} San Andreas 1st Response RP — Immersive FiveM RP adventures await.</p>
+              <p className="mt-1">Built by NorthByteTech</p>
             </div>
           </div>
         </footer>

@@ -7,9 +7,9 @@ import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES } from "@/lib/departments";
 import type { DepartmentCode } from "@/lib/portalApi";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
-  NZP: Shield,
-  FENZ: Flame,
-  HHSJ: HeartPulse,
+  LEO: Shield,
+  SAFD: Flame,
+  SAEMS: HeartPulse,
 };
 
 export default function DepartmentsPage() {
@@ -17,7 +17,7 @@ export default function DepartmentsPage() {
     <div className="space-y-8">
       <PageHeader title="Emergency Departments">
         Live counts of who&apos;s currently on duty:{" "}
-        <Link href="/status" className="text-moss-400 hover:underline">
+        <Link href="/status" className="text-trooper-400 hover:underline">
           Live Status
         </Link>
         .

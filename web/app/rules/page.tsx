@@ -10,13 +10,13 @@ const RULE_SECTIONS = [
     title: "Roleplay quality",
     body: "Stay in character, engage with fear/injury RP, and avoid metagaming or powergaming.",
     icon: Wand2,
-    tone: "moss",
+    tone: "trooper",
   },
   {
     title: "Conduct",
     body: "Treat other players and staff with respect. Harassment, hate speech, and cheating are not tolerated.",
     icon: Users,
-    tone: "sand",
+    tone: "steel",
   },
   {
     title: "Combat and RDM/VDM",
@@ -28,13 +28,13 @@ const RULE_SECTIONS = [
     title: "Streaming and recording",
     body: "Follow the community's streamer tag rules if you plan to stream or record sessions.",
     icon: Video,
-    tone: "moss",
+    tone: "trooper",
   },
   {
     title: "Reporting issues",
     body: "Use the in-game report command or open a Discord ticket - don't take rule disputes into your own hands.",
     icon: MessageCircleWarning,
-    tone: "sand",
+    tone: "steel",
   },
   {
     title: "Enforcement",

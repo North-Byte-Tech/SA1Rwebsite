@@ -1,7 +1,7 @@
 # sfos-web
 
 Next.js (App Router, TypeScript) community website — landing/rules,
-player portal, PD/FENZ/HHSJ recruitment, and an admin dashboard, all as one
+player portal, LEO/SAFD/SAEMS recruitment, and an admin dashboard, all as one
 app gated by session + permission checks. Deployed to Vercel. Talks to the
 game database only indirectly, through the sibling `portal-api` service
 (never holds a MySQL credential itself).
@@ -59,7 +59,7 @@ dashboard is Phase 4 — see the design doc.
 ## Local setup
 
 1. Get a local Postgres running (e.g. `postgres.app`, Docker, or your
-   package manager) and create a database for this app, e.g. `kcrp_web`.
+   package manager) and create a database for this app, e.g. `sa1r_web`.
 2. Create a Discord application at
    https://discord.com/developers/applications, OAuth2 tab: add redirect
    URI `http://localhost:3000/api/auth/callback/discord`, copy the Client

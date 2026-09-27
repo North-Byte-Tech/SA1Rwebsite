@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getSession, DEV_AUTH_BYPASSED } from "@/lib/session";
 import { AuthButton } from "@/components/AuthButton";
 import { STAFF_ADMIN_PERMISSION } from "@/lib/requireAdmin";
+// @ts-expect-error Next.js processes global CSS imports during its build.
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -83,7 +84,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                   href="/admin"
                   className="rounded-full px-3 py-1.5 font-medium text-muted transition-colors hover:bg-surface-raised hover:text-bone"
                 >
-                  Admin
+                  Staff
                 </Link>
               )}
             </nav>
@@ -121,7 +122,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <div className="border-t border-line/60">
             <div className="mx-auto w-full max-w-5xl px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
               <p>© {new Date().getFullYear()} San Andreas 1st Response RP — Immersive FiveM RP adventures await.</p>
-              <p className="mt-1">Built by NorthByteTech</p>
+              <a
+                href="https://northbytetech.com"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 inline-block transition-colors hover:text-bone"
+              >
+                Built by NorthByteTech
+              </a>
             </div>
           </div>
         </footer>

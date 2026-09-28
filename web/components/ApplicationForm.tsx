@@ -2,18 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import type { DepartmentCode } from "@/lib/departments";
+import { getApplicationTypeByDepartment } from "@/lib/applicationTypes";
 import { buttonClasses } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-
-// Generic field set shared by all departments for now - answers is a
-// flexible JSON column on department_applications specifically so this can
-// be revised per department later without a schema change.
-const FIELDS = [
-  { name: "timezone", label: "What timezone are you in?" },
-  { name: "experience", label: "What's your roleplay / emergency-services RP experience?" },
-  { name: "availability", label: "How many hours a week can you commit?" },
-  { name: "whyJoin", label: "Why do you want to join this department?" },
-] as const;
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
@@ -22,6 +13,7 @@ const TEXTAREA_CLASSES =
   + "focus:border-trooper-500 focus:outline-none focus:ring-1 focus:ring-trooper-500";
 
 export function ApplicationForm({ departmentCode }: { departmentCode: DepartmentCode }) {
+  const applicationType = getApplicationTypeByDepartment(departmentCode);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [state, setState] = useState<SubmitState>("idle");
 
@@ -51,21 +43,54 @@ export function ApplicationForm({ departmentCode }: { departmentCode: Department
   return (
     <Card>
       <form onSubmit={handleSubmit} className="space-y-5">
-        {FIELDS.map((field) => (
-          <div key={field.name}>
+        {applicationType.fields.map((field) => (
+          <div key={field.id}>
             <label htmlFor={field.name} className="text-sm font-medium text-bone">
               {field.label}
             </label>
-            <textarea
-              id={field.name}
-              required
-              rows={3}
-              className={TEXTAREA_CLASSES}
-              value={answers[field.name] ?? ""}
-              onChange={(event) =>
-                setAnswers((prev) => ({ ...prev, [field.name]: event.target.value }))
-              }
-            />
+
+            {field.type === "textarea" ? (
+              <textarea
+                id={field.name}
+                required={field.required}
+                rows={3}
+                className={TEXTAREA_CLASSES}
+                placeholder={field.placeholder}
+                value={answers[field.name] ?? ""}
+                onChange={(event) =>
+                  setAnswers((prev) => ({ ...prev, [field.name]: event.target.value }))
+                }
+              />
+            ) : field.type === "select" ? (
+              <select
+                id={field.name}
+                required={field.required}
+                className={TEXTAREA_CLASSES}
+                value={answers[field.name] ?? ""}
+                onChange={(event) =>
+                  setAnswers((prev) => ({ ...prev, [field.name]: event.target.value }))
+                }
+              >
+                <option value="">Select one</option>
+                {field.options?.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id={field.name}
+                type="text"
+                required={field.required}
+                className={TEXTAREA_CLASSES}
+                placeholder={field.placeholder}
+                value={answers[field.name] ?? ""}
+                onChange={(event) =>
+                  setAnswers((prev) => ({ ...prev, [field.name]: event.target.value }))
+                }
+              />
+            )}
           </div>
         ))}
         <button type="submit" disabled={state === "submitting"} className={buttonClasses("primary", "w-full")}>

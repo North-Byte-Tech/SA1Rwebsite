@@ -8,6 +8,9 @@ const ADMIN_NAV = [
   { href: "/admin/accounts", label: "Accounts" },
   { href: "/admin/staff", label: "Staff" },
   { href: "/admin/applications", label: "Applications" },
+  { href: "/admin/department-decisions", label: "Department Decisions" },
+  { href: "/admin/application-types", label: "Application Types" },
+  { href: "/admin/form-builder", label: "Form Builder" },
   { href: "/admin/audit-log", label: "Audit Log" },
 ] as const;
 

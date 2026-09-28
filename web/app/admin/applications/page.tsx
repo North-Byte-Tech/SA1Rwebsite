@@ -6,7 +6,10 @@ import { ApplicationsQueue } from "@/components/admin/ApplicationsQueue";
 import type { ApplicationStatus } from "@/lib/applications";
 
 const TABS: { status: ApplicationStatus; label: string }[] = [
-  { status: "pending", label: "Pending" },
+  { status: "pending", label: "Submitted" },
+  { status: "interview_scheduled", label: "Interview Scheduled" },
+  { status: "interview_completed", label: "Interview Completed" },
+  { status: "awaiting_brad_decision", label: "Awaiting Brad" },
   { status: "accepted", label: "Accepted" },
   { status: "rejected", label: "Rejected" },
 ];
@@ -34,7 +37,7 @@ export default async function AdminApplicationsPage({ searchParams }: { searchPa
           </Link>
         ))}
       </div>
-      <ApplicationsQueue applications={applications} showActions={status === "pending"} />
+      <ApplicationsQueue applications={applications} showActions={["pending", "interview_scheduled", "interview_completed", "awaiting_brad_decision"].includes(status)} />
     </div>
   );
 }

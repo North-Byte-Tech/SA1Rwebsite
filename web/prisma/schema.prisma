@@ -85,6 +85,9 @@ model VerificationToken {
 
 enum ApplicationStatus {
   pending
+  interview_scheduled
+  interview_completed
+  awaiting_brad_decision
   accepted
   rejected
 }

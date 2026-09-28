@@ -5,19 +5,8 @@ import { DEPARTMENTS } from "@/lib/departments";
 import { AuthButton } from "@/components/AuthButton";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
-import { Badge, type BadgeTone } from "@/components/ui/Badge";
-
-const STATUS_LABELS: Record<ApplicationStatus, string> = {
-  pending: "Pending review",
-  accepted: "Accepted",
-  rejected: "Rejected",
-};
-
-const STATUS_TONES: Record<ApplicationStatus, BadgeTone> = {
-  pending: "warning",
-  accepted: "success",
-  rejected: "danger",
-};
+import { Badge } from "@/components/ui/Badge";
+import { getApplicationStatusLabel, getApplicationStatusTone } from "@/lib/recruitmentStatus";
 
 export default async function PortalPage() {
   const session = await getSession();
@@ -99,7 +88,7 @@ export default async function PortalPage() {
                 <span className="text-bone">
                   {application.department} — submitted {new Date(application.createdAt).toLocaleDateString()}
                 </span>
-                <Badge tone={STATUS_TONES[application.status]}>{STATUS_LABELS[application.status]}</Badge>
+                <Badge tone={getApplicationStatusTone(application.status)}>{getApplicationStatusLabel(application.status)}</Badge>
               </li>
             ))}
           </ul>

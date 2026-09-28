@@ -29,6 +29,14 @@ export const config = {
   bot: {
     httpPort: Number(process.env.BOT_HTTP_PORT ?? 30121),
   },
+  recruitment: {
+    eventSecret: process.env.DISCORD_RECRUITMENT_SECRET ?? process.env.FXSERVER_LOG_SECRET ?? "",
+    roleIds: {
+      LEO: process.env.DISCORD_ROLE_LEO ?? "",
+      SAFD: process.env.DISCORD_ROLE_SAFD ?? "",
+      SAEMS: process.env.DISCORD_ROLE_SAEMS ?? "",
+    },
+  },
   // Website integration - the live on-duty status board. The bot polls the
   // web app's PUBLIC GET /api/status (no secret needed - portal-api used to
   // sit in front of this, now the website itself hosts the status snapshot)

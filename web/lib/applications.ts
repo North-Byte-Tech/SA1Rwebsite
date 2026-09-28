@@ -1,6 +1,7 @@
 import type { ApplicationStatus, Prisma } from "@prisma/client";
 import { prisma } from "./prisma";
 import type { DepartmentCode } from "./departments";
+import { emitRecruitmentBotEvent } from "./discordBot";
 
 export type { ApplicationStatus };
 
@@ -22,6 +23,13 @@ export async function submitDepartmentApplication(input: DepartmentApplicationIn
       department: input.department,
       answers: input.answers as Prisma.InputJsonValue,
     },
+  });
+
+  await emitRecruitmentBotEvent("application_submitted", {
+    discordId: input.discordId,
+    discordUsername: input.discordUsername,
+    department: input.department,
+    message: "Your application has been submitted and a staff member will review it.",
   });
 }
 

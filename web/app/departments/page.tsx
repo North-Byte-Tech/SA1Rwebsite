@@ -3,6 +3,7 @@ import { Flame, HeartPulse, Shield } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { DepartmentRecruitmentGate, DepartmentRecruitmentPill } from "@/components/DepartmentRecruitmentStatus";
 import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
@@ -41,12 +42,28 @@ export default function DepartmentsPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex items-center justify-between gap-3">
                 <Link href={`/departments/${department.slug}`} className="text-sm font-medium text-bone hover:underline">
                   Learn more →
                 </Link>
-                {!department.recruitmentOpen && <Badge tone="neutral">Closed</Badge>}
+                <DepartmentRecruitmentPill departmentCode={department.code} />
               </div>
+
+              <DepartmentRecruitmentGate
+                departmentCode={department.code}
+                fallback={
+                  <div className="mt-4 rounded-xl border border-line bg-[#121610] px-3 py-2 text-center text-xs font-medium text-muted">
+                    Applications closed
+                  </div>
+                }
+              >
+                <Link
+                  href={`/departments/${department.slug}/apply`}
+                  className={"mt-4 inline-flex w-full items-center justify-center rounded-xl bg-gradient-primary px-3 py-2 text-sm font-semibold text-bone shadow-glow-sm transition hover:brightness-110"}
+                >
+                  Apply Now
+                </Link>
+              </DepartmentRecruitmentGate>
             </Card>
           );
         })}

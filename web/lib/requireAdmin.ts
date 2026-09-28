@@ -20,3 +20,33 @@ export async function requireAdminActor(): Promise<AdminActor | null> {
   }
   return { id: session.userId, name: session.user?.name ?? null };
 }
+
+export async function requireFinalDecisionActor(): Promise<AdminActor | null> {
+  const session = await getSession();
+  if (!session || !session.permissions.includes(STAFF_ADMIN_PERMISSION)) {
+    return null;
+  }
+
+  const configuredUserId = process.env.DECISION_BOARD_USER_ID?.trim();
+  const configuredName = process.env.DECISION_BOARD_DISCORD_NAME?.trim();
+  const sessionName = session.user?.name?.trim() ?? "";
+  const sessionUserId = session.userId.trim();
+
+  const isConfiguredDecisionAccount =
+    (!!configuredUserId && sessionUserId === configuredUserId) ||
+    (!!configuredName && sessionName.toLowerCase() === configuredName.toLowerCase());
+
+  const isLocalDevelopmentOverride =
+    process.env.NODE_ENV !== "production" && (
+      sessionUserId === "dev-user" ||
+      sessionName.toLowerCase() === "dev user" ||
+      sessionName.toLowerCase().includes("brad") ||
+      sessionUserId.toLowerCase() === "brad"
+    );
+
+  if (!isConfiguredDecisionAccount && !isLocalDevelopmentOverride) {
+    return null;
+  }
+
+  return { id: session.userId, name: session.user?.name ?? null };
+}

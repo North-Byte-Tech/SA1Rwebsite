@@ -81,9 +81,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               {session?.permissions.includes(STAFF_ADMIN_PERMISSION) && (
                 <Link
                   href="/admin"
-                  className="rounded-full px-3 py-1.5 font-medium text-muted transition-colors hover:bg-surface-raised hover:text-bone"
+                  className="rounded-full border border-trooper-500/40 bg-gradient-to-r from-trooper-600/30 to-gold-500/10 px-3 py-1.5 font-semibold text-bone shadow-glow-sm transition-all hover:-translate-y-0.5 hover:border-trooper-400 hover:shadow-glow"
                 >
-                  Staff
+                  Staff Panel
                 </Link>
               )}
             </nav>
@@ -125,7 +125,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 href="https://northbytetech.com"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-1 inline-block transition-colors hover:text-bone"
+                className="mt-2 inline-flex items-center justify-center rounded-full border border-line bg-surface-raised px-2.5 py-1 text-[11px] font-medium text-steel transition-colors hover:border-steel-300/70 hover:text-bone"
               >
                 Built by NorthByteTech
               </a>

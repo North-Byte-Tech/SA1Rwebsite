@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { buttonClasses } from "@/components/ui/Button";
+import { DepartmentRecruitmentGate, DepartmentRecruitmentPill } from "@/components/DepartmentRecruitmentStatus";
 import { DEPARTMENT_ACCENT_CLASSES, getAgencyBySlug, getDepartmentBySlug } from "@/lib/departments";
 
 export default function AgencyPage({ params }: { params: { slug: string; agency: string } }) {
@@ -28,9 +29,7 @@ export default function AgencyPage({ params }: { params: { slug: string; agency:
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="text-3xl text-bone">{agency.name}</h1>
           <Badge tone="neutral">{agency.heading.replace(/ Agencies$/, "")}</Badge>
-          <Badge tone={department.recruitmentOpen ? "success" : "neutral"}>
-            {department.recruitmentOpen ? "Recruiting" : "Closed"}
-          </Badge>
+          <DepartmentRecruitmentPill departmentCode={department.code} />
         </div>
         <p className="text-muted">
           One of the agencies recruited through {department.name} - {department.summary}
@@ -64,13 +63,14 @@ export default function AgencyPage({ params }: { params: { slug: string; agency:
         </Card>
       </div>
 
-      {department.recruitmentOpen ? (
+      <DepartmentRecruitmentGate
+        departmentCode={department.code}
+        fallback={<p className="text-sm text-muted">Recruitment is currently closed. Check back later.</p>}
+      >
         <Link href={`/departments/${department.slug}/apply`} className={buttonClasses("primary")}>
           Apply Now
         </Link>
-      ) : (
-        <p className="text-sm text-muted">Recruitment is currently closed. Check back later.</p>
-      )}
+      </DepartmentRecruitmentGate>
     </div>
   );
 }

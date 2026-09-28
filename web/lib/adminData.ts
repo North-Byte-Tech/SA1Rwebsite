@@ -8,7 +8,7 @@
 // None of these functions re-check the caller's permission themselves -
 // requireAdminActor() (see lib/requireAdmin.ts) is the one gate, called by
 // every /admin page and /api/admin/* route before any of this runs.
-import type { ApplicationStatus } from "@prisma/client";
+import { Prisma, type ApplicationStatus } from "@prisma/client";
 import { prisma } from "./prisma";
 import type { AdminActor } from "./requireAdmin";
 import { PERMISSION_CATALOG, type PermissionCatalogEntry } from "./permissions";
@@ -295,11 +295,80 @@ export async function listApplications(status?: ApplicationStatus): Promise<Appl
 export async function updateApplicationStatus(
   actor: AdminActor,
   id: string,
-  status: "accepted" | "rejected",
+  status: "pending" | "interview_scheduled" | "interview_completed" | "awaiting_brad_decision" | "accepted" | "rejected",
+  details?: { interviewDate?: string | null; notes?: string | null },
 ): Promise<void> {
+  const application = await prisma.application.findUnique({ where: { id } });
+  if (!application) {
+    throw new Error(`Application not found: ${id}`);
+  }
+
+  const answers = (application.answers as Record<string, unknown> | null) ?? {};
+  const nextAnswers = { ...answers } as Record<string, unknown>;
+
+  if (details?.interviewDate) {
+    nextAnswers.interviewDate = details.interviewDate;
+  }
+  if (details?.notes) {
+    nextAnswers.interviewNotes = details.notes;
+  }
+  if (status === "interview_completed") {
+    nextAnswers.interviewCompletedAt = new Date().toISOString();
+  }
+  if (status === "awaiting_brad_decision") {
+    nextAnswers.awaitingBradDecisionAt = new Date().toISOString();
+  }
+  if (status === "accepted" || status === "rejected") {
+    nextAnswers.finalDecision = status;
+    nextAnswers.finalDecisionAt = new Date().toISOString();
+  }
+
   await prisma.application.update({
     where: { id },
-    data: { status, reviewedAt: new Date(), reviewedById: actor.id, reviewedByName: actor.name },
+    data: {
+      status,
+      reviewedAt: new Date(),
+      reviewedById: actor.id,
+      reviewedByName: actor.name,
+      answers: nextAnswers as Prisma.InputJsonValue,
+    },
   });
-  await logAction(actor, status === "accepted" ? "application_accepted" : "application_rejected", "application", id, null);
+
+  const actionName =
+    status === "interview_scheduled"
+      ? "application_interview_scheduled"
+      : status === "interview_completed"
+        ? "application_interview_completed"
+        : status === "awaiting_brad_decision"
+          ? "application_awaiting_brad_decision"
+          : status === "accepted"
+            ? "application_accepted"
+            : status === "rejected"
+              ? "application_rejected"
+              : "application_updated";
+
+  await logAction(actor, actionName, "application", id, details?.interviewDate ?? null);
+  await import("./discordBot").then(({ emitRecruitmentBotEvent }) => {
+    const eventName =
+      status === "interview_scheduled"
+        ? "interview_scheduled"
+        : status === "interview_completed"
+          ? "interview_completed"
+          : status === "awaiting_brad_decision"
+            ? "awaiting_brad_decision"
+            : status === "accepted"
+              ? "application_accepted"
+              : status === "rejected"
+                ? "application_rejected"
+                : "application_submitted";
+
+    return emitRecruitmentBotEvent(eventName as any, {
+      discordId: application.discordId,
+      discordUsername: application.discordUsername,
+      department: application.department,
+      interviewDate: details?.interviewDate ?? null,
+      message: details?.notes ?? "",
+      accepted: status === "accepted",
+    });
+  });
 }

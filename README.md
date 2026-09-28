@@ -27,7 +27,7 @@ reference only; it is not part of the running system and isn't deployed
 anywhere. One consequence of the retirement: there's no more live link to
 FiveM character data, so the player portal no longer shows a character
 roster, and applying/using the portal no longer requires having connected
-to the FiveM server first - any signed-in Discord user can.
+to the FiveM server first - any sigdned-in Discord user can.
 
 See each service's README for local setup and deployment.
 

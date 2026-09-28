@@ -3,9 +3,8 @@ import type { ReactNode } from "react";
 import { Inter, Oswald } from "next/font/google";
 import Link from "next/link";
 import { getSession, DEV_AUTH_BYPASSED } from "@/lib/session";
+import { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
 import { AuthButton } from "@/components/AuthButton";
-//import { STAFF_ADMIN_PERMISSION } from "@/lib/requireAdmin";
-// @ts-expect-error Next.js processes global CSS imports during its build.
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });

@@ -1,18 +1,22 @@
 import Link from "next/link";
-import { Flame, HeartPulse, Shield } from "lucide-react";
+import { Flame, HeartPulse, Radio, Shield, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { DepartmentRecruitmentGate, DepartmentRecruitmentPill } from "@/components/DepartmentRecruitmentStatus";
-import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES, type DepartmentCode } from "@/lib/departments";
+import { DEPARTMENT_ACCENT_CLASSES, getDepartments, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,
   SAFD: Flame,
   SAEMS: HeartPulse,
+  DISPATCH: Radio,
+  CIV: ShieldCheck,
 };
 
 export default function DepartmentsPage() {
+  const departments = getDepartments();
+
   return (
     <div className="space-y-8">
       <PageHeader title="Emergency Departments">
@@ -24,7 +28,7 @@ export default function DepartmentsPage() {
       </PageHeader>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        {DEPARTMENTS.map((department) => {
+        {departments.map((department) => {
           const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
           const Icon = DEPARTMENT_ICONS[department.code];
           return (

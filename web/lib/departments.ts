@@ -1,4 +1,4 @@
-export type DepartmentCode = "LEO" | "SAFD" | "SAEMS";
+export type DepartmentCode = "LEO" | "SAFD" | "SAEMS" | "DISPATCH" | "CIV";
 
 export type DepartmentAccent = "blue" | "red" | "amber";
 
@@ -34,7 +34,7 @@ export interface DepartmentInfo {
   portal: DepartmentPortalInfo;
 }
 
-export const DEPARTMENTS: DepartmentInfo[] = [
+export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
   {
     code: "LEO",
     slug: "leo",
@@ -112,86 +112,164 @@ export const DEPARTMENTS: DepartmentInfo[] = [
     code: "SAFD",
     slug: "safd",
     name: "San Andreas Fire & Rescue Services (SAFD)",
-    summary: "Structure fires, road crash rescue, and hazmat response.",
-    features: ["Structure fire response", "Road crash rescue", "Hazmat & rescue ops"],
+    summary: "Fire, EMS, and dispatch operations covering emergency response, medical support, and coordinated incident command.",
+    features: ["Fire & rescue response", "EMS support operations", "Dispatch & incident coordination"],
     accent: "red",
     recruitmentOpen: false,
     ranks: ["Recruit Firefighter", "Firefighter", "Senior Firefighter", "Station Officer", "Senior Station Officer"],
     requirements: [
       "Linked Discord and FiveM account in good standing",
-      "Willingness to train on apparatus and rescue tools in-character",
-      "Comfortable working alongside Police and EMS on scene",
+      "Willingness to train on apparatus, rescue, and medical support operations",
+      "Comfortable coordinating with police, dispatch, and multi-agency scenes",
       "Available for at least one shift per week once appointed",
     ],
     portal: {
       equipment: [
         "Turnout gear, SCBA, and rescue tools",
-        "Portable radios and EMS medical kit",
+        "Portable radios, medical kits, and dispatch reference materials",
         "Station-issued hydrant and hazard response lookup guides",
       ],
       callsigns: [
         "Engine: E-1, E-2, E-3",
         "Rescue: R-1 and heavy rescue assignments",
-        "Command: Battalion and duty officers",
+        "Command: Battalion, duty officers, and dispatch coordination",
       ],
       rules: [
         "Follow scene safety and command structure on every incident",
-        "Provide proper radio traffic and patient handoff procedures",
-        "Coordinate with police and EMS on all multi-agency responses",
+        "Provide proper radio traffic, patient handoff, and dispatch communication",
+        "Coordinate with police and medical crews on all multi-agency responses",
       ],
       roster: [
         { name: "Fire Chief", title: "Command" },
         { name: "Battalion Officer", title: "Operations" },
         { name: "Engineer", title: "Station" },
         { name: "Paramedic Lead", title: "Medical" },
-        { name: "Rescue Specialist", title: "Special Ops" },
+        { name: "Dispatch Supervisor", title: "Communications" },
       ],
     },
   },
   {
-    code: "SAEMS",
-    slug: "saems",
-    name: "San Andreas Emergency Medical Services",
-    summary: "Ambulance and emergency medical response.",
-    features: ["Emergency medical response", "Ambulance operations", "Hospital & triage RP"],
-    accent: "amber",
+    code: "DISPATCH",
+    slug: "dispatch",
+    name: "San Andreas Dispatch",
+    summary: "Regional communications, radio operations, and dispatch coordination for emergency services.",
+    features: ["Regional emergency dispatch", "Radio & call handling", "Multi-agency coordination"],
+    accent: "blue",
     recruitmentOpen: false,
-    ranks: ["Trainee EMT", "EMT", "Paramedic", "Senior Paramedic", "Shift Supervisor"],
+    ranks: ["Trainee Dispatcher", "Dispatcher", "Senior Dispatcher", "Shift Supervisor", "Operations Supervisor"],
     requirements: [
       "Linked Discord and FiveM account in good standing",
-      "Comfortable with medical roleplay and treatment procedure",
-      "Willingness to train on triage and transport protocol",
+      "Comfortable managing radio traffic and incident flow",
+      "Strong communication and coordination skills under pressure",
       "Available for at least one shift per week once appointed",
     ],
     portal: {
       equipment: [
-        "Ambulance kit, trauma bag, and radio pack",
-        "Medical PPE and transport response gear",
-        "Department call sheets and triage reference cards",
+        "Dispatch console, radio system, and incident log",
+        "Regional map access and callout checklists",
+        "Operational SOPs and channel management references",
       ],
       callsigns: [
-        "Medic: M-1 to M-5 depending on area",
-        "Supervisor: EMS duty lead and shift commander",
-        "Transport: ambulance assignments and support units",
+        "Dispatch: D-1 to D-5 by region",
+        "Supervisor: duty chief and shift lead",
+        "Operations: command coordination and event support",
       ],
       rules: [
-        "Maintain patient confidentiality and proper medical RP",
-        "Follow dispatch instructions and transport protocols",
-        "Coordinate with fire and police for multi-agency scenes",
+        "Maintain accurate and clear radio traffic at all times",
+        "Prioritize active incidents and scene safety communications",
+        "Coordinate timely updates with police, fire, and EMS personnel",
       ],
       roster: [
-        { name: "EMS Director", title: "Command" },
+        { name: "Dispatch Director", title: "Command" },
         { name: "Shift Supervisor", title: "Operations" },
-        { name: "Lead Paramedic", title: "Medical" },
-        { name: "Advanced Life Support", title: "Response" },
-        { name: "Transport Crew", title: "Operations" },
+        { name: "Lead Dispatcher", title: "Communications" },
+        { name: "Regional Call Desk", title: "Support" },
+        { name: "Coordination Desk", title: "Planning" },
+      ],
+    },
+  },
+  {
+    code: "CIV",
+    slug: "civ",
+    name: "San Andreas Civilian Community",
+    summary: "Civilian life, community support, and non-emergency public engagement across the state.",
+    features: ["Civilian roleplay", "Community engagement", "Non-emergency support"],
+    accent: "amber",
+    recruitmentOpen: false,
+    ranks: ["Resident", "Community Member", "Senior Community Member", "Support Lead", "Community Mentor"],
+    requirements: [
+      "Linked Discord and FiveM account in good standing",
+      "Willingness to participate in community events and RP scenes",
+      "Friendly, respectful communication with all community members",
+      "Available for regular in-character community activity",
+    ],
+    portal: {
+      equipment: [
+        "Community profile and roleplay access",
+        "Local knowledge and event participation tools",
+        "Public-facing RP guides and support references",
+      ],
+      callsigns: [
+        "Civilian: community callsigns and local role references",
+        "Support: public events and services",
+        "Public: community engagement and local activity",
+      ],
+      rules: [
+        "Treat all community members with respect and professionalism",
+        "Participate positively in roleplay and public-facing events",
+        "Support the wider server culture and community standards",
+      ],
+      roster: [
+        { name: "Community Director", title: "Leadership" },
+        { name: "Event Coordinators", title: "Support" },
+        { name: "Resident Leads", title: "Community" },
+        { name: "Public Services", title: "Support" },
+        { name: "Community Mentors", title: "Guidance" },
       ],
     },
   },
 ];
 
+export const DEPARTMENTS_STORAGE_KEY = "sa1r-admin-departments";
+
+export function getStoredDepartments(): DepartmentInfo[] {
+  if (typeof window === "undefined") {
+    return DEFAULT_DEPARTMENTS;
+  }
+
+  try {
+    const saved = window.localStorage.getItem(DEPARTMENTS_STORAGE_KEY);
+    if (!saved) {
+      return DEFAULT_DEPARTMENTS;
+    }
+
+    const parsed = JSON.parse(saved) as DepartmentInfo[];
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return parsed;
+    }
+  } catch {
+    // Ignore malformed local storage data and fall back to defaults.
+  }
+
+  return DEFAULT_DEPARTMENTS;
+}
+
+export function saveStoredDepartments(departments: DepartmentInfo[]) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(DEPARTMENTS_STORAGE_KEY, JSON.stringify(departments));
+}
+
+export function getDepartments(): DepartmentInfo[] {
+  return getStoredDepartments();
+}
+
+export const DEPARTMENTS: DepartmentInfo[] = DEFAULT_DEPARTMENTS;
+
 export function getDepartmentBySlug(slug: string): DepartmentInfo | undefined {
-  return DEPARTMENTS.find((department) => department.slug === slug);
+  return getDepartments().find((department) => department.slug === slug);
 }
 
 export function slugifyAgency(name: string): string {

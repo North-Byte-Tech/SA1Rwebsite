@@ -3,7 +3,7 @@ import { getSession } from "@/lib/session";
 import { submitDepartmentApplication } from "@/lib/applications";
 import type { DepartmentCode } from "@/lib/departments";
 
-const VALID_DEPARTMENTS: DepartmentCode[] = ["LEO", "SAFD", "SAEMS"];
+const VALID_DEPARTMENTS: DepartmentCode[] = ["LEO", "SAFD", "SAEMS", "DISPATCH", "CIV"];
 
 interface ApplicationRequestBody {
   department: DepartmentCode;

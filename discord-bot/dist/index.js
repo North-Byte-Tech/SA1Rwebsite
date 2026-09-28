@@ -1,0 +1,41 @@
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
+import { config } from "./config.js";
+import { revokeAllDiscordPermissions, syncMemberPermissions } from "./roleSync.js";
+import { startLogHttpServer } from "./httpServer.js";
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+    partials: [Partials.GuildMember],
+});
+client.once(Events.ClientReady, async (readyClient) => {
+    console.log(`[sa1r-discord-bot] logged in as ${readyClient.user.tag}`);
+    startLogHttpServer(readyClient);
+    const guild = await readyClient.guilds.fetch(config.discordGuildId);
+    const members = await guild.members.fetch();
+    console.log(`[sa1r-discord-bot] running initial role sync for ${members.size} members...`);
+    for (const member of members.values()) {
+        try {
+            await syncMemberPermissions(member);
+        }
+        catch (err) {
+            console.error(`[sa1r-discord-bot] failed initial sync for ${member.id}:`, err);
+        }
+    }
+    console.log("[sa1r-discord-bot] initial role sync complete");
+});
+client.on(Events.GuildMemberUpdate, async (_oldMember, newMember) => {
+    try {
+        await syncMemberPermissions(await newMember.fetch());
+    }
+    catch (err) {
+        console.error(`[sa1r-discord-bot] failed to sync ${newMember.id}:`, err);
+    }
+});
+client.on(Events.GuildMemberRemove, async (member) => {
+    try {
+        await revokeAllDiscordPermissions(member.id);
+    }
+    catch (err) {
+        console.error(`[sa1r-discord-bot] failed to revoke permissions for departing member ${member.id}:`, err);
+    }
+});
+client.login(config.discordBotToken);

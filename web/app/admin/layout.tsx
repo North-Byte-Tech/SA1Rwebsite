@@ -8,6 +8,7 @@ const ADMIN_NAV = [
   { href: "/admin/accounts", label: "Accounts" },
   { href: "/admin/staff", label: "Staff" },
   { href: "/admin/applications", label: "Applications" },
+  { href: "/admin/departments", label: "Departments" },
   { href: "/admin/department-decisions", label: "Department Decisions" },
   { href: "/admin/application-types", label: "Application Types" },
   { href: "/admin/form-builder", label: "Form Builder" },

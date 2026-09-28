@@ -14,6 +14,7 @@ const TEXTAREA_CLASSES =
 
 export function ApplicationForm({ departmentCode }: { departmentCode: DepartmentCode }) {
   const applicationType = getApplicationTypeByDepartment(departmentCode);
+  const recruitmentDiscordUrl = process.env.NEXT_PUBLIC_RECRUITMENT_DISCORD_URL?.trim();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [state, setState] = useState<SubmitState>("idle");
 
@@ -34,8 +35,18 @@ export function ApplicationForm({ departmentCode }: { departmentCode: Department
 
   if (state === "success") {
     return (
-      <Card className="text-center text-sm text-muted">
-        Application submitted. Staff will review it and reach out on Discord.
+      <Card className="space-y-3 text-center text-sm text-muted">
+        <p>Application submitted. Staff will review it and reach out on Discord.</p>
+        {recruitmentDiscordUrl ? (
+          <a
+            href={recruitmentDiscordUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-trooper-500 px-4 py-2 text-sm font-medium text-bone transition hover:bg-trooper-400"
+          >
+            Join the recruitment Discord
+          </a>
+        ) : null}
       </Card>
     );
   }

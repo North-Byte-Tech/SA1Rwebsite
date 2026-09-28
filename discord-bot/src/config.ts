@@ -31,6 +31,7 @@ export const config = {
   },
   recruitment: {
     eventSecret: process.env.DISCORD_RECRUITMENT_SECRET ?? process.env.FXSERVER_LOG_SECRET ?? "",
+    mainDiscordInviteUrl: process.env.DISCORD_MAIN_INVITE_URL?.trim() ?? "",
     roleIds: {
       LEO: process.env.DISCORD_ROLE_LEO ?? "",
       SAFD: process.env.DISCORD_ROLE_SAFD ?? "",

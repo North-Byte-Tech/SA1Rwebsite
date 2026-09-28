@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Flame, HeartPulse, Shield } from "lucide-react";
+import { Flame, HeartPulse, Radio, Shield, ShieldCheck } from "lucide-react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -11,6 +11,8 @@ const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,
   SAFD: Flame,
   SAEMS: HeartPulse,
+  DISPATCH: Radio,
+  CIV: ShieldCheck,
 };
 
 export default function DepartmentPage({ params }: { params: { slug: string } }) {

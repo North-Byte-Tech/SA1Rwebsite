@@ -1,43 +1,17 @@
 import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { config } from "./config.js";
 import { revokeAllDiscordPermissions, syncMemberPermissions } from "./roleSync.js";
-import { registerCommands } from "./registerCommands.js";
-import { registerInteractionHandlers } from "./interactions.js";
 import { startLogHttpServer } from "./httpServer.js";
-import { startStatusAnnouncer } from "./statusAnnouncer.js";
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
   partials: [Partials.GuildMember],
 });
 
-registerInteractionHandlers(client);
-
 client.once(Events.ClientReady, async (readyClient) => {
   console.log(`[sa1r-discord-bot] logged in as ${readyClient.user.tag}`);
 
-  try {
-    await registerCommands();
-  } catch (err) {
-    console.error("[sa1r-discord-bot] failed to register slash commands:", err);
-  }
-
-  // Optional feature - only start the log HTTP server if a channel is
-  // actually configured, matching the Lua side's own no-op-when-unset stance.
-  if (config.discordLogChannelId) {
-    startLogHttpServer(readyClient);
-  } else {
-    console.log("[sa1r-discord-bot] DISCORD_LOG_CHANNEL_ID not set, skipping audit log server");
-  }
-
-  // Optional website feature - the live on-duty status board. Needs both a
-  // channel to post in and the website's base URL to poll; skip entirely
-  // otherwise.
-  if (config.status.channelId && config.status.webBaseUrl) {
-    startStatusAnnouncer(readyClient);
-  } else {
-    console.log("[sa1r-discord-bot] status board not configured (DISCORD_STATUS_CHANNEL_ID/WEB_BASE_URL), skipping");
-  }
+  startLogHttpServer(readyClient);
 
   const guild = await readyClient.guilds.fetch(config.discordGuildId);
   const members = await guild.members.fetch();

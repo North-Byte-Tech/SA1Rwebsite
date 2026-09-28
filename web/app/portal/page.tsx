@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { listMyApplications, type ApplicationStatus } from "@/lib/applications";
-import { DEPARTMENTS } from "@/lib/departments";
+import { getDepartments } from "@/lib/departments";
 import { AuthButton } from "@/components/AuthButton";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -26,6 +26,7 @@ export default async function PortalPage() {
   }
 
   const applications = await listMyApplications(session.discordId);
+  const departments = getDepartments();
   const departmentPortals: { id: string; name: string; slug: string }[] = [];
 
   for (const application of applications) {
@@ -33,7 +34,7 @@ export default async function PortalPage() {
       continue;
     }
 
-    const department = DEPARTMENTS.find((entry) => entry.code === application.department);
+    const department = departments.find((entry) => entry.code === application.department);
     if (!department) {
       continue;
     }

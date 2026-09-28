@@ -6,12 +6,16 @@ import { Card } from "@/components/ui/Card";
 import { IconTile, type IconTileTone } from "@/components/ui/IconTile";
 import { Pill } from "@/components/ui/Pill";
 import { GetStartedButton } from "@/components/GetStartedButton";
-import { DEPARTMENTS, DEPARTMENT_ACCENT_CLASSES, type DepartmentCode } from "@/lib/departments";
+import { DEPARTMENT_ACCENT_CLASSES, getDepartments, type DepartmentCode } from "@/lib/departments";
+
+const RECRUITMENT_DISCORD_URL = (process.env.NEXT_PUBLIC_RECRUITMENT_DISCORD_URL ?? "https://discord.gg/DPYATmwcqV").trim();
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,
   SAFD: Flame,
   SAEMS: HeartPulse,
+  DISPATCH: Radio,
+  CIV: ShieldCheck,
 };
 
 const QUICK_LINKS = [
@@ -47,6 +51,7 @@ const QUICK_LINKS = [
 
 export default async function HomePage() {
   const session = await getSession();
+  const departments = getDepartments();
 
   return (
     <div className="space-y-20">
@@ -94,6 +99,25 @@ export default async function HomePage() {
         )}
       </section>
 
+      {RECRUITMENT_DISCORD_URL ? (
+        <section className="rounded-2xl border border-trooper-500/40 bg-trooper-950/40 p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-trooper-300">Recruitment Discord</p>
+              <h2 className="mt-1 text-2xl text-bone">Join the recruitment server</h2>
+            </div>
+            <Link
+              href={RECRUITMENT_DISCORD_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-trooper-500 px-4 py-2 text-sm font-medium text-bone transition hover:bg-trooper-400"
+            >
+              Join Recruitment Discord
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <section className="space-y-4">
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-2xl text-bone">Departments</h2>
@@ -102,7 +126,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          {DEPARTMENTS.map((department) => {
+          {departments.map((department) => {
             const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
             const Icon = DEPARTMENT_ICONS[department.code];
             return (

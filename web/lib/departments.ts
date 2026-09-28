@@ -2,6 +2,13 @@ export type DepartmentCode = "LEO" | "SAFD" | "SAEMS";
 
 export type DepartmentAccent = "blue" | "red" | "amber";
 
+export interface DepartmentPortalInfo {
+  equipment: string[];
+  callsigns: string[];
+  rules: string[];
+  roster: { name: string; title: string }[];
+}
+
 export interface DepartmentInfo {
   code: DepartmentCode;
   slug: string;
@@ -24,6 +31,7 @@ export interface DepartmentInfo {
   // agencies through a single application) - rendered on the department
   // detail page when present.
   agencyGroups?: { heading: string; agencies: string[] }[];
+  portal: DepartmentPortalInfo;
 }
 
 export const DEPARTMENTS: DepartmentInfo[] = [
@@ -42,6 +50,30 @@ export const DEPARTMENTS: DepartmentInfo[] = [
       "Comfortable with radio codes and basic RP procedure",
       "Available for at least one shift per week once appointed",
     ],
+    portal: {
+      equipment: [
+        "Duty uniform, radio, and body worn equipment",
+        "Patrol issued sidearm and standard issue kit",
+        "Department identification, callsign patch, and SOP folder",
+      ],
+      callsigns: [
+        "Patrol: 10-1 to 10-99 depending on unit assignment",
+        "Command: Chief, Deputy Chief, and Shift Supervisor",
+        "Operations: Investigations, Traffic, and K-9 support units",
+      ],
+      rules: [
+        "Follow department SOPs and radio discipline at all times",
+        "Maintain professionalism in every interaction and dispatch call",
+        "Report any policy issue or welfare concern to command immediately",
+      ],
+      roster: [
+        { name: "Chief of Police", title: "Command" },
+        { name: "Deputy Chief", title: "Command" },
+        { name: "Shift Supervisor", title: "Operations" },
+        { name: "Patrol Sergeant", title: "Patrol" },
+        { name: "Detective Unit", title: "Investigations" },
+      ],
+    },
     agencyGroups: [
       {
         heading: "State Agencies",
@@ -91,6 +123,30 @@ export const DEPARTMENTS: DepartmentInfo[] = [
       "Comfortable working alongside Police and EMS on scene",
       "Available for at least one shift per week once appointed",
     ],
+    portal: {
+      equipment: [
+        "Turnout gear, SCBA, and rescue tools",
+        "Portable radios and EMS medical kit",
+        "Station-issued hydrant and hazard response lookup guides",
+      ],
+      callsigns: [
+        "Engine: E-1, E-2, E-3",
+        "Rescue: R-1 and heavy rescue assignments",
+        "Command: Battalion and duty officers",
+      ],
+      rules: [
+        "Follow scene safety and command structure on every incident",
+        "Provide proper radio traffic and patient handoff procedures",
+        "Coordinate with police and EMS on all multi-agency responses",
+      ],
+      roster: [
+        { name: "Fire Chief", title: "Command" },
+        { name: "Battalion Officer", title: "Operations" },
+        { name: "Engineer", title: "Station" },
+        { name: "Paramedic Lead", title: "Medical" },
+        { name: "Rescue Specialist", title: "Special Ops" },
+      ],
+    },
   },
   {
     code: "SAEMS",
@@ -107,6 +163,30 @@ export const DEPARTMENTS: DepartmentInfo[] = [
       "Willingness to train on triage and transport protocol",
       "Available for at least one shift per week once appointed",
     ],
+    portal: {
+      equipment: [
+        "Ambulance kit, trauma bag, and radio pack",
+        "Medical PPE and transport response gear",
+        "Department call sheets and triage reference cards",
+      ],
+      callsigns: [
+        "Medic: M-1 to M-5 depending on area",
+        "Supervisor: EMS duty lead and shift commander",
+        "Transport: ambulance assignments and support units",
+      ],
+      rules: [
+        "Maintain patient confidentiality and proper medical RP",
+        "Follow dispatch instructions and transport protocols",
+        "Coordinate with fire and police for multi-agency scenes",
+      ],
+      roster: [
+        { name: "EMS Director", title: "Command" },
+        { name: "Shift Supervisor", title: "Operations" },
+        { name: "Lead Paramedic", title: "Medical" },
+        { name: "Advanced Life Support", title: "Response" },
+        { name: "Transport Crew", title: "Operations" },
+      ],
+    },
   },
 ];
 

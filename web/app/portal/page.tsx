@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { listMyApplications, type ApplicationStatus } from "@/lib/applications";
+import { DEPARTMENTS } from "@/lib/departments";
 import { AuthButton } from "@/components/AuthButton";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
@@ -35,6 +37,23 @@ export default async function PortalPage() {
   }
 
   const applications = await listMyApplications(session.discordId);
+  const departmentPortals: { id: string; name: string; slug: string }[] = [];
+
+  for (const application of applications) {
+    if (application.status !== "accepted") {
+      continue;
+    }
+
+    const department = DEPARTMENTS.find((entry) => entry.code === application.department);
+    if (!department) {
+      continue;
+    }
+
+    const existingPortal = departmentPortals.find((portal) => portal.slug === department.slug);
+    if (!existingPortal) {
+      departmentPortals.push({ id: application.id, name: department.name, slug: department.slug });
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -46,6 +65,27 @@ export default async function PortalPage() {
           <dt className="text-muted">Discord</dt>
           <dd className="text-bone">{session.user?.name ?? "unknown"}</dd>
         </dl>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg text-bone">Department Portals</h2>
+        {departmentPortals.length === 0 ? (
+          <p className="mt-2 text-sm text-muted">
+            Once your application is accepted, your department portal links will appear here.
+          </p>
+        ) : (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {departmentPortals.map((portal) => (
+              <Link
+                key={portal.id}
+                href={`/departments/${portal.slug}`}
+                className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-medium text-bone transition hover:border-trooper-400 hover:text-trooper-300"
+              >
+                {portal.name} Portal
+              </Link>
+            ))}
+          </div>
+        )}
       </Card>
 
       <Card>

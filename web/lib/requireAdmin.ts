@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/session";
 import { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
 
-export { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
+//export { STAFF_ADMIN_PERMISSION } from "@/lib/permissions";
 
 export interface AdminActor {
   id: string;

@@ -35,11 +35,16 @@ export const config = {
             SAFD: process.env.DISCORD_ROLE_SAFD ?? "",
             SAEMS: process.env.DISCORD_ROLE_SAEMS ?? "",
         },
+        webhookUrls: {
+            LEO: process.env.DISCORD_RECRUITMENT_WEBHOOK_LEO ?? "",
+            SAFD: process.env.DISCORD_RECRUITMENT_WEBHOOK_SAFD ?? "",
+            DISPATCH: process.env.DISCORD_RECRUITMENT_WEBHOOK_DISPATCH ?? "",
+            CIV: process.env.DISCORD_RECRUITMENT_WEBHOOK_CIV ?? "",
+        },
     },
     // Website integration - the live on-duty status board. The bot polls the
-    // web app's PUBLIC GET /api/status (no secret needed - portal-api used to
-    // sit in front of this, now the website itself hosts the status snapshot)
-    // and edits a single message in the configured channel. Both must be set
+    // web app's public GET /api/status (no secret needed) and edits a single
+    // message in the configured channel. Both must be set
     // to enable it; leave DISCORD_STATUS_CHANNEL_ID blank to skip the feature
     // entirely, the same graceful-degradation stance as the audit-log server.
     status: {

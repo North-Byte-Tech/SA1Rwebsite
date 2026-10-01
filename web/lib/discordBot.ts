@@ -18,7 +18,7 @@ export async function emitRecruitmentBotEvent(
   }
 
   try {
-    await fetch(`${baseUrl}/recruitment/${event}`, {
+    const response = await fetch(`${baseUrl}/recruitment/${event}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,6 +26,9 @@ export async function emitRecruitmentBotEvent(
       },
       body: JSON.stringify(payload),
     });
+    if (!response.ok) {
+      console.warn(`[sa1r-web] Discord bot rejected ${event} notification: HTTP ${response.status}`);
+    }
   } catch (err) {
     console.warn(`[sa1r-web] failed to notify Discord bot for ${event}:`, err);
   }

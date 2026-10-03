@@ -62,6 +62,14 @@ export async function revokeDiscordPermission(accountId: number, permission: str
   ]);
 }
 
+export async function grantDiscordWhitelist(discordId: string): Promise<void> {
+  await pool.query("INSERT IGNORE INTO discord_whitelist (discord_id) VALUES (?)", [discordId]);
+}
+
+export async function revokeDiscordWhitelist(discordId: string): Promise<void> {
+  await pool.query("DELETE FROM discord_whitelist WHERE discord_id = ?", [discordId]);
+}
+
 export interface AccountSummary {
   account_id: number;
   fivem_username: string;

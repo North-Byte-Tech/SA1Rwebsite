@@ -24,6 +24,9 @@ export const config = {
         syncSecret: required("FXSERVER_SYNC_SECRET"),
         logSecret: process.env.FXSERVER_LOG_SECRET ?? "",
     },
+    whitelist: {
+        discordRoleId: process.env.DISCORD_WHITELIST_ROLE_ID?.trim() ?? "",
+    },
     bot: {
         httpPort: Number(process.env.BOT_HTTP_PORT ?? 30121),
     },

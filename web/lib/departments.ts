@@ -2,6 +2,45 @@ export type DepartmentCode = "LEO" | "SAFD" | "SAEMS" | "DISPATCH" | "CIV";
 
 export type DepartmentAccent = "blue" | "red" | "amber";
 
+export interface DepartmentImage {
+  src: string;
+  alt: string;
+}
+
+const LAW_ENFORCEMENT_IMAGE: DepartmentImage = {
+  src: "/sa1r-gallery-02.jpg",
+  alt: "A San Andreas police patrol vehicle responding on a rural highway",
+};
+
+const EMERGENCY_RESPONSE_IMAGE: DepartmentImage = {
+  src: "/sa1r-gallery-08.webp",
+  alt: "A San Andreas Fire and Rescue vehicle at a rural response scene",
+};
+
+export function getDepartmentImage(code: DepartmentCode): DepartmentImage {
+  switch (code) {
+    case "LEO":
+      return LAW_ENFORCEMENT_IMAGE;
+    case "DISPATCH":
+      return {
+        src: "/sa1r-gallery-05.webp",
+        alt: "Police and fire units coordinating at a multi-agency scene",
+      };
+    case "SAEMS":
+      return {
+        src: "/sa1r-gallery-01.webp",
+        alt: "Fire chief and responder coordinating beside a marked response vehicle",
+      };
+    case "CIV":
+      return {
+        src: "/sa1r-gallery-03.webp",
+        alt: "Two residents meeting beside a vehicle in San Andreas",
+      };
+    case "SAFD":
+      return EMERGENCY_RESPONSE_IMAGE;
+  }
+}
+
 export interface DepartmentInfo {
   code: DepartmentCode;
   slug: string;

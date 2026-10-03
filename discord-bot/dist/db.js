@@ -39,6 +39,12 @@ export async function revokeDiscordPermission(accountId, permission) {
         permission,
     ]);
 }
+export async function grantDiscordWhitelist(discordId) {
+    await pool.query("INSERT IGNORE INTO discord_whitelist (discord_id) VALUES (?)", [discordId]);
+}
+export async function revokeDiscordWhitelist(discordId) {
+    await pool.query("DELETE FROM discord_whitelist WHERE discord_id = ?", [discordId]);
+}
 export async function getAccountSummary(discordId) {
     const [rows] = await pool.query("SELECT account_id, fivem_username, created_at FROM accounts WHERE discord_identifier = ? LIMIT 1", [discordId]);
     return rows.length > 0 ? rows[0] : null;

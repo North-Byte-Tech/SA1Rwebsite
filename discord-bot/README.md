@@ -13,6 +13,9 @@ Jobs:
    `/lookup-player`) for staff to manage a linked player's permissions.
 3. **Audit log** (optional) — posts an embed to a Discord channel for game
    events (connect/disconnect, character creation, duty status, etc.).
+4. **FiveM whitelist sync** — mirrors membership in one configured Discord
+   role into the shared game database for every server using the whitelist
+   resource.
 
 ## Website integration
 
@@ -45,10 +48,15 @@ disable them. `DISCORD_LOG_CHANNEL_ID` only controls game audit embeds.
    this bot's reachable base URL (for example,
    `http://127.0.0.1:30121`). For acceptance roles, set the relevant
    `DISCORD_ROLE_LEO`, `DISCORD_ROLE_SAFD`, and/or `DISCORD_ROLE_SAEMS` role
+   IDs. Set `DISCORD_WHITELIST_ROLE_ID` to the Discord role that grants access
+   to all FiveM servers; role membership is synced on bot startup, role
+   changes, and Discord server departures.
 5. Populate `discord_role_mappings` (see the main SFOS repo's
    `database/migrations/0002_permissions.sql`) with your Discord role IDs
    mapped to `sa1r.role.*` permissions.
-6. `pnpm install` (from repo root), then `pnpm --filter sa1r-discord-bot dev`
+6. Install the FiveM resource and create its `discord_whitelist` table by
+   following [`fivem/sa1r_whitelist/README.md`](../fivem/sa1r_whitelist/README.md).
+7. `pnpm install` (from repo root), then `pnpm --filter sa1r-discord-bot dev`
    for local iteration, or `pnpm --filter sa1r-discord-bot build && pnpm
    --filter sa1r-discord-bot start` to run compiled.
 

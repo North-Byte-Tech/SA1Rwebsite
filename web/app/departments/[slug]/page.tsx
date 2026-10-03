@@ -1,11 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Flame, HeartPulse, Radio, Shield, ShieldCheck } from "lucide-react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { DepartmentRecruitmentGate, DepartmentRecruitmentPill } from "@/components/DepartmentRecruitmentStatus";
-import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, slugifyAgency, type DepartmentCode } from "@/lib/departments";
+import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, getDepartmentImage, slugifyAgency, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
   LEO: Shield,
@@ -27,25 +28,38 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
   return (
     <div className="space-y-8">
       <header className="space-y-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300">San Andreas 1st Response / Departments</p>
-        <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
-          <Icon className="h-7 w-7" />
+        <div className="relative isolate flex min-h-64 items-end overflow-hidden rounded-2xl border border-line p-6 sm:min-h-80 sm:p-8">
+          <Image
+            src={getDepartmentImage(department.code).src}
+            alt={getDepartmentImage(department.code).alt}
+            fill
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/10" />
+          <div className="relative z-10 space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300">San Andreas 1st Response / Departments</p>
+            <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
+              <Icon className="h-7 w-7" />
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-4xl text-bone sm:text-5xl">{department.name}</h1>
+              <DepartmentRecruitmentPill departmentCode={department.code} />
+            </div>
+            <p className="max-w-3xl text-steel-300">{department.summary}</p>
+            {department.externalSiteUrl && (
+              <a
+                href={department.externalSiteUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={buttonClasses("secondary", "w-fit")}
+              >
+                Visit Fire & Rescue Website ↗
+              </a>
+            )}
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-4xl text-bone sm:text-5xl">{department.name}</h1>
-          <DepartmentRecruitmentPill departmentCode={department.code} />
-        </div>
-        <p className="text-muted">{department.summary}</p>
-        {department.externalSiteUrl && (
-          <a
-            href={department.externalSiteUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonClasses("secondary", "w-fit")}
-          >
-            Visit Fire & Rescue Website ↗
-          </a>
-        )}
       </header>
 
       <div className="grid gap-4 md:grid-cols-[1.3fr_0.7fr]">

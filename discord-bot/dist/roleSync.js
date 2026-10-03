@@ -1,6 +1,20 @@
-import { getAccountIdByDiscordId, getActiveRoleMappings, getDiscordSourcedPermissions, grantDiscordPermission, revokeDiscordPermission, } from "./db.js";
+import { getAccountIdByDiscordId, getActiveRoleMappings, getDiscordSourcedPermissions, grantDiscordWhitelist, grantDiscordPermission, revokeDiscordWhitelist, revokeDiscordPermission, } from "./db.js";
 import { notifyFxServer } from "./fxsync.js";
 import { debugLog } from "./debug.js";
+import { config } from "./config.js";
+export async function syncMemberWhitelist(member) {
+    if (!config.whitelist.discordRoleId) {
+        return;
+    }
+    if (member.roles.cache.has(config.whitelist.discordRoleId)) {
+        await grantDiscordWhitelist(member.id);
+        debugLog("whitelist", `discord ${member.id} is whitelisted`);
+    }
+    else {
+        await revokeDiscordWhitelist(member.id);
+        debugLog("whitelist", `discord ${member.id} is not whitelisted`);
+    }
+}
 // Discord roles drive account-level permission_grants ONLY — never
 // agency_ranks/character_agency_memberships. Discord identifies an account
 // (a person), never a specific character; in-game rank/career progression

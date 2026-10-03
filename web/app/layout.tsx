@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Oswald } from "next/font/google";
 import Link from "next/link";
 import { getSession, DEV_AUTH_BYPASSED } from "@/lib/session";
@@ -148,6 +149,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             </div>
           </div>
         </footer>
+        <SpeedInsights />
       </body>
     </html>
   );

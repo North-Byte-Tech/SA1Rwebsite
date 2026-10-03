@@ -23,7 +23,6 @@ The website integrations added on top of the ported bot are:
 - **Recruitment notifications** — the website posts application lifecycle
    events directly to this bot's `POST /recruitment/:event` endpoint. The bot
    DMs applicants, and can assign configured department roles on acceptance.
-   It also posts an update to that department's configured Discord webhook.
    This is independent of the game audit log and does not require
    `DISCORD_LOG_CHANNEL_ID`. Configure the website's `DISCORD_BOT_WEBHOOK_URL`
    and `DISCORD_BOT_WEBHOOK_SECRET`; the secret must match this bot's
@@ -55,10 +54,7 @@ embeds.
    this bot's reachable base URL (for example,
    `http://127.0.0.1:30121`). For acceptance roles, set the relevant
    `DISCORD_ROLE_LEO`, `DISCORD_ROLE_SAFD`, and/or `DISCORD_ROLE_SAEMS` role
-   IDs. Set each optional `DISCORD_RECRUITMENT_WEBHOOK_LEO`,
-   `DISCORD_RECRUITMENT_WEBHOOK_SAFD`, `DISCORD_RECRUITMENT_WEBHOOK_DISPATCH`,
-   and `DISCORD_RECRUITMENT_WEBHOOK_CIV` to that department's Discord webhook
-   URL. For the status board, set `DISCORD_STATUS_CHANNEL_ID` and
+   IDs. For the status board, set `DISCORD_STATUS_CHANNEL_ID` and
    `WEB_BASE_URL` to the deployed website's base URL.
 5. Populate `discord_role_mappings` (see the main SFOS repo's
    `database/migrations/0002_permissions.sql`) with your Discord role IDs

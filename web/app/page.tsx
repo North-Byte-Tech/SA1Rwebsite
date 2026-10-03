@@ -36,7 +36,7 @@ const QUICK_LINKS = [
   {
     href: "/departments",
     title: "Departments",
-    body: "PD, Fire, and Ambulance recruitment.",
+    body: "Explore emergency services, civilian life, and recruitment.",
     icon: ShieldCheck,
     tone: "gold",
   },
@@ -55,25 +55,25 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-20">
-      <section className="-mx-4 space-y-6 rounded-3xl bg-hero-glow px-4 py-16 text-center sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div className="flex justify-center">
-          <Pill>
-            <MapPin className="h-4 w-4 text-trooper-400" />
-            State of San Andreas
-          </Pill>
+      <section className="hero-panel relative left-1/2 flex min-h-[430px] w-screen -translate-x-1/2 flex-col items-center justify-center gap-6 border-y border-line px-5 py-16 text-center sm:px-8">
+        <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-steel">
+          <span className="h-px w-8 bg-trooper-400" />
+          <MapPin className="h-4 w-4 text-trooper-400" />
+          State of San Andreas
+          <span className="h-px w-8 bg-trooper-400" />
         </div>
-        <h1 className="text-4xl font-semibold text-bone sm:text-6xl">
-          San Andreas <span className="text-gradient-brand">1st Response</span>
+        <h1 className="max-w-5xl text-5xl font-semibold uppercase leading-[0.98] tracking-[0.06em] text-bone sm:text-7xl lg:text-8xl">
+          San Andreas
+          <span className="mt-2 block text-gradient-brand">1st Response</span>
         </h1>
-        <p className="mx-auto max-w-xl text-lg text-muted">
-          Immersive FiveM RP adventures await. Join a community built on creativity, teamwork, and respect - where
-          every member feels valued and included.
+        <p className="max-w-xl text-lg text-muted sm:text-xl">
+          All-hazards roleplay. Covering San Andreas.
         </p>
-        <div className="flex flex-wrap justify-center gap-4 pt-2">
+        <div className="flex flex-wrap justify-center gap-3 pt-2">
           {session ? (
             <>
-              <Link href="/portal" className={buttonClasses("primary")}>
-                Go to My Portal
+              <Link href="/departments" className={buttonClasses("primary")}>
+                Explore Departments
               </Link>
               <Link href="/join" className={buttonClasses("secondary")}>
                 How to Join
@@ -118,9 +118,12 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      <section className="space-y-4">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl text-bone">Departments</h2>
+      <section className="space-y-5">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300">Find your role</p>
+            <h2 className="mt-1 text-3xl text-bone">Departments</h2>
+          </div>
           <Link href="/departments" className="text-sm font-medium text-trooper-400 hover:underline">
             View all →
           </Link>
@@ -130,26 +133,45 @@ export default async function HomePage() {
             const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
             const Icon = DEPARTMENT_ICONS[department.code];
             return (
-              <Link key={department.slug} href={`/departments/${department.slug}`}>
                 <Card
-                  className={`h-full border-t-2 transition-all hover:-translate-y-0.5 ${accent.border}`}
+                  key={department.slug}
+                  className={`flex h-full flex-col border-t-2 transition-colors hover:border-trooper-400 ${accent.border}`}
                 >
                   <div className={`flex h-11 w-11 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="mt-3 text-base text-bone">{department.name}</h3>
+                  <h3 className="mt-4 text-lg text-bone">{department.name}</h3>
                   <p className="mt-1 text-sm text-muted">{department.summary}</p>
+                  <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5 text-sm font-semibold">
+                    <Link href={`/departments/${department.slug}`} className="text-bone hover:text-trooper-300">
+                      Explore →
+                    </Link>
+                    {department.externalSiteUrl && (
+                      <a
+                        href={department.externalSiteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-trooper-300 hover:text-bone"
+                      >
+                        Visit Fire & Rescue ↗
+                      </a>
+                    )}
+                  </div>
                 </Card>
-              </Link>
             );
           })}
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2">
+      <section className="space-y-5">
+        <div className="border-b border-line pb-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300">Community resources</p>
+          <h2 className="mt-1 text-3xl text-bone">Get started</h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
         {QUICK_LINKS.map((link) => (
           <Link key={link.href} href={link.href}>
-            <Card className="flex h-full items-start gap-4 transition-all hover:-translate-y-0.5 hover:border-trooper-600/60">
+            <Card className="flex h-full items-start gap-4 transition-colors hover:border-trooper-400">
               <IconTile tone={link.tone}>
                 <link.icon className="h-6 w-6" />
               </IconTile>
@@ -160,6 +182,7 @@ export default async function HomePage() {
             </Card>
           </Link>
         ))}
+        </div>
       </section>
     </div>
   );

@@ -32,27 +32,3 @@ export async function submitDepartmentApplication(input: DepartmentApplicationIn
     message: "Your application has been submitted and a staff member will review it.",
   });
 }
-
-export interface ApplicationSummary {
-  id: string;
-  department: DepartmentCode;
-  status: ApplicationStatus;
-  createdAt: string;
-  reviewedAt: string | null;
-}
-
-// Fetched fresh on every /portal page load (not read off the session) so a
-// newly reviewed application shows up without forcing a re-login.
-export async function listMyApplications(discordId: string): Promise<ApplicationSummary[]> {
-  const rows = await prisma.application.findMany({
-    where: { discordId },
-    orderBy: { createdAt: "desc" },
-  });
-  return rows.map((row) => ({
-    id: row.id,
-    department: row.department as DepartmentCode,
-    status: row.status,
-    createdAt: row.createdAt.toISOString(),
-    reviewedAt: row.reviewedAt?.toISOString() ?? null,
-  }));
-}

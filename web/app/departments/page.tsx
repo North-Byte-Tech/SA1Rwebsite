@@ -32,13 +32,16 @@ export default function DepartmentsPage() {
           const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
           const Icon = DEPARTMENT_ICONS[department.code];
           return (
-            <Card key={department.slug} className="flex flex-col transition-all hover:-translate-y-0.5">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
-                <Icon className="h-6 w-6" />
+            <Card key={department.slug} className={`flex flex-col border-t-2 ${accent.border}`}>
+              <div className="flex items-start justify-between gap-3">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+                <DepartmentRecruitmentPill departmentCode={department.code} />
               </div>
-              <h2 className="mt-4 text-lg text-bone">{department.name}</h2>
+              <h2 className="mt-4 text-xl text-bone">{department.name}</h2>
               <p className="mt-1 text-sm text-muted">{department.summary}</p>
-              <ul className="mt-4 space-y-1 text-sm text-muted">
+              <ul className="mt-4 space-y-2 text-sm text-muted">
                 {department.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2">
                     <span className={accent.text}>›</span>
@@ -46,28 +49,33 @@ export default function DepartmentsPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 flex items-center justify-between gap-3">
-                <Link href={`/departments/${department.slug}`} className="text-sm font-medium text-bone hover:underline">
-                  Learn more →
+              <div className="mt-auto space-y-3 pt-5">
+                <Link href={`/departments/${department.slug}`} className="text-sm font-semibold text-bone hover:text-trooper-300">
+                  Department information →
                 </Link>
-                <DepartmentRecruitmentPill departmentCode={department.code} />
-              </div>
-
-              <DepartmentRecruitmentGate
-                departmentCode={department.code}
-                fallback={
-                  <div className="mt-4 rounded-xl border border-line bg-[#121610] px-3 py-2 text-center text-xs font-medium text-muted">
-                    Applications closed
-                  </div>
-                }
-              >
-                <Link
-                  href={`/departments/${department.slug}/apply`}
-                  className={"mt-4 inline-flex w-full items-center justify-center rounded-xl bg-gradient-primary px-3 py-2 text-sm font-semibold text-bone shadow-glow-sm transition hover:brightness-110"}
+                {department.externalSiteUrl && (
+                  <a
+                    href={department.externalSiteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex w-full items-center justify-center rounded-sm border border-line px-3 py-2 text-sm font-semibold uppercase tracking-wider text-bone transition-colors hover:border-trooper-400"
+                  >
+                    Visit Fire & Rescue ↗
+                  </a>
+                )}
+                <DepartmentRecruitmentGate
+                  departmentCode={department.code}
+                  fallback={
+                    <div className="rounded-sm border border-line bg-ink/50 px-3 py-2 text-center text-xs font-medium uppercase tracking-wider text-muted">
+                      Applications closed
+                    </div>
+                  }
                 >
-                  Apply Now
-                </Link>
-              </DepartmentRecruitmentGate>
+                  <Link href={`/departments/${department.slug}/apply`} className="inline-flex w-full items-center justify-center rounded-sm bg-gradient-primary px-3 py-2 text-sm font-semibold uppercase tracking-wider text-bone shadow-glow-sm transition hover:brightness-110">
+                    Apply Now
+                  </Link>
+                </DepartmentRecruitmentGate>
+              </div>
             </Card>
           );
         })}

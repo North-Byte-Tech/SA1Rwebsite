@@ -21,25 +21,6 @@ function formatLines(value: string[]): string {
   return value.join("\n");
 }
 
-function parseRoster(value: string): { name: string; title: string }[] {
-  return value
-    .split(/\n/)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [name = "", ...rest] = line.split("|");
-      return {
-        name: name.trim(),
-        title: rest.join("|").trim() || "Member",
-      };
-    })
-    .filter((item) => item.name);
-}
-
-function formatRoster(value: { name: string; title: string }[]): string {
-  return value.map((member) => `${member.name} | ${member.title}`).join("\n");
-}
-
 export function DepartmentEditor() {
   const [departments, setDepartments] = useState<DepartmentInfo[]>(() => getStoredDepartments());
 
@@ -170,79 +151,6 @@ export function DepartmentEditor() {
               </label>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="block text-sm text-muted">
-                <span className="mb-2 block text-bone">Equipment</span>
-                <textarea
-                  rows={4}
-                  value={formatLines(department.portal.equipment)}
-                  onChange={(event) =>
-                    updateDepartment(department.code, (entry) => ({
-                      ...entry,
-                      portal: {
-                        ...entry.portal,
-                        equipment: parseLines(event.target.value),
-                      },
-                    }))
-                  }
-                  className="w-full rounded-xl border border-line bg-[#12160f] px-3 py-2.5 text-base text-bone outline-none focus:border-trooper-500"
-                />
-              </label>
-
-              <label className="block text-sm text-muted">
-                <span className="mb-2 block text-bone">Callsigns</span>
-                <textarea
-                  rows={4}
-                  value={formatLines(department.portal.callsigns)}
-                  onChange={(event) =>
-                    updateDepartment(department.code, (entry) => ({
-                      ...entry,
-                      portal: {
-                        ...entry.portal,
-                        callsigns: parseLines(event.target.value),
-                      },
-                    }))
-                  }
-                  className="w-full rounded-xl border border-line bg-[#12160f] px-3 py-2.5 text-base text-bone outline-none focus:border-trooper-500"
-                />
-              </label>
-            </div>
-
-            <label className="block text-sm text-muted">
-              <span className="mb-2 block text-bone">Rules</span>
-              <textarea
-                rows={4}
-                value={formatLines(department.portal.rules)}
-                onChange={(event) =>
-                  updateDepartment(department.code, (entry) => ({
-                    ...entry,
-                    portal: {
-                      ...entry.portal,
-                      rules: parseLines(event.target.value),
-                    },
-                  }))
-                }
-                className="w-full rounded-xl border border-line bg-[#12160f] px-3 py-2.5 text-base text-bone outline-none focus:border-trooper-500"
-              />
-            </label>
-
-            <label className="block text-sm text-muted">
-              <span className="mb-2 block text-bone">Roster (one per line as Name | Title)</span>
-              <textarea
-                rows={4}
-                value={formatRoster(department.portal.roster)}
-                onChange={(event) =>
-                  updateDepartment(department.code, (entry) => ({
-                    ...entry,
-                    portal: {
-                      ...entry.portal,
-                      roster: parseRoster(event.target.value),
-                    },
-                  }))
-                }
-                className="w-full rounded-xl border border-line bg-[#12160f] px-3 py-2.5 text-base text-bone outline-none focus:border-trooper-500"
-              />
-            </label>
           </Card>
         ))}
       </div>

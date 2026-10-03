@@ -12,7 +12,7 @@ const display = Oswald({ subsets: ["latin"], weight: ["500", "600", "700"], vari
 
 export const metadata: Metadata = {
   title: "San Andreas 1st Response RP",
-  description: "San Andreas 1st Response RP - community, recruitment, and player portal.",
+  description: "San Andreas 1st Response RP - community, recruitment, and department information.",
 };
 
 const NAV_LINKS = [
@@ -32,14 +32,12 @@ const FOOTER_SECTIONS = [
       { href: "/join", label: "How to Join" },
       { href: "/departments", label: "Departments" },
       { href: "/status", label: "Live Status" },
+      { href: "https://fire.sa1r.com", label: "SAFD Fire & Rescue" },
     ],
   },
   {
-    heading: "Account",
-    links: [
-      { href: "/portal", label: "My Portal" },
-      { href: "/departments", label: "Apply Now" },
-    ],
+    heading: "Get Involved",
+    links: [{ href: "/departments", label: "Apply Now" }],
   },
 ] as const;
 
@@ -54,34 +52,38 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             Dev mode: signed in as a fake session (DEV_BYPASS_AUTH). Set DEV_BYPASS_AUTH=false to use real Discord sign-in.
           </div>
         )}
-        <header className="sticky top-0 z-10 border-b border-line/80 bg-ink/85 backdrop-blur-md">
-          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 sm:px-6 lg:px-8">
-            <Link href="/" className="flex items-center gap-3">
+        <header className="sticky top-0 z-20 border-b border-line/80 bg-ink/95 backdrop-blur-md">
+          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2.5 sm:px-6 lg:flex-nowrap lg:gap-x-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-3" aria-label="San Andreas 1st Response home">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="San Andreas 1st Response RP" className="h-12 w-auto drop-shadow-[0_0_12px_rgba(59,110,165,0.35)]" />
+              <img src="/logo.png" alt="" className="h-10 w-auto drop-shadow-[0_0_12px_rgba(59,110,165,0.25)]" />
+              <span className="hidden border-l border-line pl-3 text-[10px] font-semibold uppercase leading-tight tracking-[0.2em] text-bone sm:block">
+                San Andreas
+                <span className="block text-trooper-300">1st Response RP</span>
+              </span>
             </Link>
-            <nav className="flex flex-1 flex-wrap items-center gap-x-1 gap-y-2 text-sm">
+            <nav aria-label="Main navigation" className="order-3 -mx-4 flex w-[calc(100%+2rem)] flex-wrap items-center justify-start gap-x-1 overflow-hidden border-t border-line px-2 pt-1 text-[11px] sm:mx-0 sm:w-full sm:px-0 sm:text-xs lg:order-none lg:w-auto lg:flex-1 lg:flex-nowrap lg:justify-center lg:overflow-visible lg:border-0 lg:pt-0">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-full px-3 py-1.5 font-medium text-muted transition-colors hover:bg-surface-raised hover:text-bone"
+                  className="nav-link relative whitespace-nowrap px-2.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
                 >
                   {link.label}
                 </Link>
               ))}
-              {session && (
-                <Link
-                  href="/portal"
-                  className="rounded-full px-3 py-1.5 font-medium text-muted transition-colors hover:bg-surface-raised hover:text-bone"
-                >
-                  My Portal
-                </Link>
-              )}
+              <a
+                href="https://fire.sa1r.com"
+                target="_blank"
+                rel="noreferrer"
+                className="nav-link relative whitespace-nowrap px-2.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
+              >
+                SAFD
+              </a>
               {session?.permissions.includes(STAFF_ADMIN_PERMISSION) && (
                 <Link
                   href="/admin"
-                  className="rounded-full border border-trooper-500/40 bg-gradient-to-r from-trooper-600/30 to-gold-500/10 px-3 py-1.5 font-semibold text-bone shadow-glow-sm transition-all hover:-translate-y-0.5 hover:border-trooper-400 hover:shadow-glow"
+                  className="rounded-sm border border-trooper-500/40 bg-trooper-700/20 px-3 py-1.5 font-semibold uppercase tracking-wider text-bone transition-colors hover:border-trooper-400"
                 >
                   Staff Panel
                 </Link>
@@ -91,10 +93,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6 lg:px-8">{children}</main>
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">{children}</main>
 
-        <footer className="border-t border-line/80 bg-surface/40">
-          <div className="mx-auto grid w-full max-w-5xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+        <footer className="border-t border-line/80 bg-ink/80">
+          <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
             <div className="space-y-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.png" alt="San Andreas 1st Response RP" className="h-14 w-auto" />
@@ -109,9 +111,15 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 <ul className="space-y-2 text-sm">
                   {section.links.map((link) => (
                     <li key={link.label}>
-                      <Link href={link.href} className="text-muted transition-colors hover:text-bone">
+                      {link.href.startsWith("http") ? (
+                        <a href={link.href} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-bone">
+                          {link.label} ↗
+                        </a>
+                      ) : (
+                        <Link href={link.href} className="text-muted transition-colors hover:text-bone">
                         {link.label}
-                      </Link>
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -119,7 +127,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             ))}
           </div>
           <div className="border-t border-line/60">
-            <div className="mx-auto w-full max-w-5xl px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-7xl px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
               <p>© {new Date().getFullYear()} San Andreas 1st Response RP — Immersive FiveM RP adventures await.</p>
               <a
                 href="https://northbytetech.com"

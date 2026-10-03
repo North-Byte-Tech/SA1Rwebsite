@@ -1,13 +1,13 @@
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold "
+  "inline-flex items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm font-semibold uppercase tracking-wider "
   + "transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary: "bg-gradient-primary text-bone shadow-glow-sm hover:shadow-glow hover:-translate-y-0.5",
   secondary:
-    "border border-steel-600/50 text-steel hover:border-steel-300/70 hover:bg-surface-raised hover:-translate-y-0.5",
+    "border border-steel-600/70 text-steel hover:border-steel-300/70 hover:bg-surface-raised",
   ghost: "text-bone hover:bg-surface-raised",
 };
 

@@ -2,13 +2,6 @@ export type DepartmentCode = "LEO" | "SAFD" | "SAEMS" | "DISPATCH" | "CIV";
 
 export type DepartmentAccent = "blue" | "red" | "amber";
 
-export interface DepartmentPortalInfo {
-  equipment: string[];
-  callsigns: string[];
-  rules: string[];
-  roster: { name: string; title: string }[];
-}
-
 export interface DepartmentInfo {
   code: DepartmentCode;
   slug: string;
@@ -16,6 +9,7 @@ export interface DepartmentInfo {
   summary: string;
   features: string[];
   accent: DepartmentAccent;
+  externalSiteUrl?: string;
   // Whether the public department page links to the apply form. The apply
   // route itself always works regardless of this flag - see
   // app/departments/[slug]/apply/page.tsx - so staff can exercise the full
@@ -31,7 +25,6 @@ export interface DepartmentInfo {
   // agencies through a single application) - rendered on the department
   // detail page when present.
   agencyGroups?: { heading: string; agencies: string[] }[];
-  portal: DepartmentPortalInfo;
 }
 
 export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
@@ -50,30 +43,6 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
       "Comfortable with radio codes and basic RP procedure",
       "Available for at least one shift per week once appointed",
     ],
-    portal: {
-      equipment: [
-        "Duty uniform, radio, and body worn equipment",
-        "Patrol issued sidearm and standard issue kit",
-        "Department identification, callsign patch, and SOP folder",
-      ],
-      callsigns: [
-        "Patrol: 10-1 to 10-99 depending on unit assignment",
-        "Command: Chief, Deputy Chief, and Shift Supervisor",
-        "Operations: Investigations, Traffic, and K-9 support units",
-      ],
-      rules: [
-        "Follow department SOPs and radio discipline at all times",
-        "Maintain professionalism in every interaction and dispatch call",
-        "Report any policy issue or welfare concern to command immediately",
-      ],
-      roster: [
-        { name: "Chief of Police", title: "Command" },
-        { name: "Deputy Chief", title: "Command" },
-        { name: "Shift Supervisor", title: "Operations" },
-        { name: "Patrol Sergeant", title: "Patrol" },
-        { name: "Detective Unit", title: "Investigations" },
-      ],
-    },
     agencyGroups: [
       {
         heading: "State Agencies",
@@ -115,6 +84,7 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
     summary: "Fire, EMS, and dispatch operations covering emergency response, medical support, and coordinated incident command.",
     features: ["Fire & rescue response", "EMS support operations", "Dispatch & incident coordination"],
     accent: "red",
+    externalSiteUrl: "https://fire.sa1r.com",
     recruitmentOpen: false,
     ranks: ["Recruit Firefighter", "Firefighter", "Senior Firefighter", "Station Officer", "Senior Station Officer"],
     requirements: [
@@ -123,30 +93,6 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
       "Comfortable coordinating with police, dispatch, and multi-agency scenes",
       "Available for at least one shift per week once appointed",
     ],
-    portal: {
-      equipment: [
-        "Turnout gear, SCBA, and rescue tools",
-        "Portable radios, medical kits, and dispatch reference materials",
-        "Station-issued hydrant and hazard response lookup guides",
-      ],
-      callsigns: [
-        "Engine: E-1, E-2, E-3",
-        "Rescue: R-1 and heavy rescue assignments",
-        "Command: Battalion, duty officers, and dispatch coordination",
-      ],
-      rules: [
-        "Follow scene safety and command structure on every incident",
-        "Provide proper radio traffic, patient handoff, and dispatch communication",
-        "Coordinate with police and medical crews on all multi-agency responses",
-      ],
-      roster: [
-        { name: "Fire Chief", title: "Command" },
-        { name: "Battalion Officer", title: "Operations" },
-        { name: "Engineer", title: "Station" },
-        { name: "Paramedic Lead", title: "Medical" },
-        { name: "Dispatch Supervisor", title: "Communications" },
-      ],
-    },
   },
   {
     code: "DISPATCH",
@@ -163,30 +109,6 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
       "Strong communication and coordination skills under pressure",
       "Available for at least one shift per week once appointed",
     ],
-    portal: {
-      equipment: [
-        "Dispatch console, radio system, and incident log",
-        "Regional map access and callout checklists",
-        "Operational SOPs and channel management references",
-      ],
-      callsigns: [
-        "Dispatch: D-1 to D-5 by region",
-        "Supervisor: duty chief and shift lead",
-        "Operations: command coordination and event support",
-      ],
-      rules: [
-        "Maintain accurate and clear radio traffic at all times",
-        "Prioritize active incidents and scene safety communications",
-        "Coordinate timely updates with police, fire, and EMS personnel",
-      ],
-      roster: [
-        { name: "Dispatch Director", title: "Command" },
-        { name: "Shift Supervisor", title: "Operations" },
-        { name: "Lead Dispatcher", title: "Communications" },
-        { name: "Regional Call Desk", title: "Support" },
-        { name: "Coordination Desk", title: "Planning" },
-      ],
-    },
   },
   {
     code: "CIV",
@@ -203,30 +125,6 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
       "Friendly, respectful communication with all community members",
       "Available for regular in-character community activity",
     ],
-    portal: {
-      equipment: [
-        "Community profile and roleplay access",
-        "Local knowledge and event participation tools",
-        "Public-facing RP guides and support references",
-      ],
-      callsigns: [
-        "Civilian: community callsigns and local role references",
-        "Support: public events and services",
-        "Public: community engagement and local activity",
-      ],
-      rules: [
-        "Treat all community members with respect and professionalism",
-        "Participate positively in roleplay and public-facing events",
-        "Support the wider server culture and community standards",
-      ],
-      roster: [
-        { name: "Community Director", title: "Leadership" },
-        { name: "Event Coordinators", title: "Support" },
-        { name: "Resident Leads", title: "Community" },
-        { name: "Public Services", title: "Support" },
-        { name: "Community Mentors", title: "Guidance" },
-      ],
-    },
   },
 ];
 
@@ -243,9 +141,13 @@ export function getStoredDepartments(): DepartmentInfo[] {
       return DEFAULT_DEPARTMENTS;
     }
 
-    const parsed = JSON.parse(saved) as DepartmentInfo[];
+    const parsed = JSON.parse(saved) as Array<DepartmentInfo & { portal?: unknown }>;
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      return parsed.map((department) => {
+        const cleaned = { ...department };
+        delete cleaned.portal;
+        return cleaned;
+      });
     }
   } catch {
     // Ignore malformed local storage data and fall back to defaults.

@@ -1,7 +1,7 @@
 # sa1r-web
 
 Next.js (App Router, TypeScript) community website — landing/rules,
-player portal, LEO/SAFD/SAEMS recruitment, and an admin dashboard, all as one
+department information and recruitment, and an admin dashboard, all as one
 app gated by session + permission checks. Deployed to Vercel. Fully
 self-contained: this app's own Postgres database is the only datastore -
 there is no separate backend service anymore.
@@ -28,9 +28,9 @@ department overview/detail), a live on-duty status board (`/status`,
 reading this app's own `/api/status`, backed by `prisma.statusSnapshot` -
 see `lib/status.ts`), a recruitment application form per department
 (`/departments/[slug]/apply`, posting to `/api/applications`, which
-requires only a signed-in session), and a player portal (`/portal`, linked
-from nav only while signed in) showing the signed-in player's own
-application statuses. Department pages only link to `/apply` when that
+requires only a signed-in session). Department portals are hosted separately
+and will be linked from this site once their URLs are ready. Department pages
+only link to `/apply` when that
 department's `recruitmentOpen` flag (`lib/departments.ts`) is `true` - flip
 it per department once you're ready to accept applications; the apply
 route itself works regardless, for testing. The admin dashboard

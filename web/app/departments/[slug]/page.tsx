@@ -27,18 +27,29 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
   return (
     <div className="space-y-8">
       <header className="space-y-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300">San Andreas 1st Response / Departments</p>
         <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-bone shadow-glow-sm ${accent.iconBg}`}>
           <Icon className="h-7 w-7" />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl text-bone">{department.name}</h1>
+          <h1 className="text-4xl text-bone sm:text-5xl">{department.name}</h1>
           <DepartmentRecruitmentPill departmentCode={department.code} />
         </div>
         <p className="text-muted">{department.summary}</p>
+        {department.externalSiteUrl && (
+          <a
+            href={department.externalSiteUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonClasses("secondary", "w-fit")}
+          >
+            Visit Fire & Rescue Website ↗
+          </a>
+        )}
       </header>
 
       <div className="grid gap-4 md:grid-cols-[1.3fr_0.7fr]">
-        <Card className="space-y-4 border border-line bg-[#121710]">
+        <Card className="space-y-4 border border-line bg-surface/90">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-muted">Recruitment</p>
@@ -56,7 +67,7 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
           <DepartmentRecruitmentGate
             departmentCode={department.code}
             fallback={
-              <div className="rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted">
+              <div className="rounded-sm border border-line bg-ink/50 px-3 py-2 text-sm text-muted">
                 Applications are temporarily closed.
               </div>
             }

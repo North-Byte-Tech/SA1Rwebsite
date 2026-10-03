@@ -5,32 +5,26 @@ const RECRUITMENT_DISCORD_URL = (process.env.NEXT_PUBLIC_RECRUITMENT_DISCORD_URL
 
 const STEPS = [
   {
-    title: "Sign in with Discord to apply",
-    body: "You must sign in with Discord before submitting an application so we can track your account and contact you properly.",
-    href: "/portal",
-    cta: "Open portal",
-  },
-  {
-    title: "Complete the department application",
-    body: "Fill out the recruitment form for the department you want to join and tell us a little about yourself.",
+    title: "Choose a department",
+    body: "Browse the departments and choose the role you want to apply for.",
     href: "/departments",
     cta: "View departments",
   },
   {
+    title: "Sign in and apply",
+    body: "Sign in with Discord and complete the recruitment form for your chosen department.",
+    href: "/departments",
+    cta: "Apply now",
+  },
+  {
     title: "We will contact you on Discord",
-    body: "Staff will reach out on Discord with interview details and status updates throughout the process.",
+    body: "Staff will reach out on Discord with interview details and application updates.",
     href: RECRUITMENT_DISCORD_URL ?? "/departments",
     cta: "Join recruitment Discord",
   },
   {
-    title: "Check your application status",
-    body: "You can track your progress in My Portal at any time while your application is being reviewed.",
-    href: "/portal",
-    cta: "Check status",
-  },
-  {
-    title: "Accepted applicants are added to the correct group",
-    body: "Once accepted, the system will add you to the appropriate department access and you can start joining the server and roleplay community.",
+    title: "Join the community",
+    body: "Once accepted, staff will help you get set up with your department and start roleplaying.",
     href: "/departments",
     cta: "See departments",
   },

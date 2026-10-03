@@ -8,12 +8,13 @@
 
 body {
   @apply bg-ink bg-radial-fade text-bone antialiased;
+  overflow-x: clip;
 }
 
 h1,
 h2,
 h3 {
-  @apply font-display tracking-wide;
+  @apply font-display tracking-wider;
 }
 
 ::selection {
@@ -24,4 +25,36 @@ h3 {
   .text-gradient-brand {
     @apply bg-gradient-brand bg-clip-text text-transparent;
   }
-}
+
+    .page-heading {
+      @apply relative space-y-3 border-b border-line pb-6;
+    }
+
+    .page-heading::before {
+      content: "";
+      @apply absolute bottom-0 left-0 h-px w-20 bg-trooper-400;
+    }
+
+    .page-heading__eyebrow {
+      @apply text-xs font-semibold uppercase tracking-[0.24em] text-trooper-300;
+    }
+
+    .hero-panel {
+      background:
+        radial-gradient(ellipse at 50% 20%, rgba(59, 110, 165, 0.24), transparent 60%),
+        linear-gradient(120deg, rgba(11, 12, 9, 0.96), rgba(21, 23, 15, 0.8)),
+        repeating-linear-gradient(135deg, transparent 0 32px, rgba(239, 236, 226, 0.025) 32px 33px);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link::after {
+      content: "";
+      @apply absolute inset-x-3 -bottom-2 h-0.5 origin-left scale-x-0 bg-trooper-400 transition-transform;
+    }
+
+    .nav-link:hover::after,
+    .nav-link:focus-visible::after {
+      @apply scale-x-100;
+    }
+  }

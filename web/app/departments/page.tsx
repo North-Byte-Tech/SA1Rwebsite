@@ -24,12 +24,12 @@ export default function DepartmentsPage() {
         Explore emergency services, community roles, and current recruitment opportunities.
       </PageHeader>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {departments.map((department) => {
           const accent = DEPARTMENT_ACCENT_CLASSES[department.accent];
           const Icon = DEPARTMENT_ICONS[department.code];
           return (
-            <Card key={department.slug} className={`flex flex-col overflow-hidden border-t-2 p-0 ${accent.border}`}>
+            <Card key={department.slug} padded={false} className={`flex flex-col overflow-hidden border-t-2 ${accent.border}`}>
               <div className="relative aspect-[16/9] w-full">
                 <Image
                   src={getDepartmentImage(department.code).src}

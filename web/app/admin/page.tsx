@@ -27,7 +27,7 @@ export default async function AdminOverviewPage() {
     <div className="space-y-8">
       <PageHeader title="Admin Dashboard" />
 
-      <Card className="border border-trooper-500/40 bg-gradient-to-r from-trooper-600/20 to-surface p-5">
+      <Card padded={false} className="border border-trooper-500/40 bg-gradient-to-r from-trooper-600/20 to-surface p-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-steel">Operations</p>

@@ -48,7 +48,7 @@ export function DepartmentDecisionBoard({
         const acceptedCount = acceptedByDepartment[type.department] ?? 0;
 
         return (
-          <Card key={type.id} className="p-0 overflow-hidden">
+          <Card key={type.id} padded={false} className="overflow-hidden">
             <div className="flex flex-col gap-4 border-b border-line bg-[#171b12] p-5 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.18em] text-steel">{type.department}</p>

@@ -30,9 +30,9 @@ requires only a signed-in session). The SAFD site is linked at
 `https://fire.sa1r.com`; other department sites can be added when their URLs
 are ready. Live game-server status reporting is not included yet and can be
 added later. Department pages only link to `/apply` when that
-department's `recruitmentOpen` flag (`lib/departments.ts`) is `true` - flip
-it per department once you're ready to accept applications; the apply
-route itself works regardless, for testing. The admin dashboard
+department's application type is active (`lib/applicationTypes.ts`) -
+manage recruitment availability from the Department Decisions or Form
+Builder tools; the apply route itself works regardless, for testing. The admin dashboard
 (`/admin/*`) covers staff roster, bans, player notes, permissions, the
 applications review queue, and a staff-action audit log - see
 `lib/adminData.ts` for all of it.

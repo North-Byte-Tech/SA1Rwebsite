@@ -6,9 +6,8 @@ import { AuthButton } from "@/components/AuthButton";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 
-// Reachable by direct link regardless of the department's recruitmentOpen
-// flag - see lib/departments.ts - so the full submission flow can be
-// exercised before it's advertised publicly.
+// Reachable by direct link even when the application type is inactive, so
+// staff can exercise the full submission flow before advertising it.
 export default async function ApplyPage({ params }: { params: { slug: string } }) {
   const department = getDepartmentBySlug(params.slug);
   if (!department) {

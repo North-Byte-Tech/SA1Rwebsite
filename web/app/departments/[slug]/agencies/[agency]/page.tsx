@@ -36,32 +36,38 @@ export default function AgencyPage({ params }: { params: { slug: string; agency:
         </p>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <h2 className="text-lg text-bone">Rank Structure</h2>
-          <ol className="mt-3 space-y-2 text-sm">
-            {department.ranks.map((rank, index) => (
-              <li key={rank} className="flex items-center gap-3 text-muted">
-                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-bone ${accent.iconBg}`}>
-                  {index + 1}
-                </span>
-                {rank}
-              </li>
-            ))}
-          </ol>
-        </Card>
-        <Card>
-          <h2 className="text-lg text-bone">Requirements to Join</h2>
-          <ul className="mt-3 space-y-2 text-sm text-muted">
-            {department.requirements.map((requirement) => (
-              <li key={requirement} className="flex items-start gap-2">
-                <span className={accent.text}>›</span>
-                {requirement}
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </div>
+      {(department.ranks.length > 0 || department.requirements.length > 0) && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {department.ranks.length > 0 && (
+            <Card>
+              <h2 className="text-lg text-bone">Rank Structure</h2>
+              <ol className="mt-3 space-y-2 text-sm">
+                {department.ranks.map((rank, index) => (
+                  <li key={rank} className="flex items-center gap-3 text-muted">
+                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-bone ${accent.iconBg}`}>
+                      {index + 1}
+                    </span>
+                    {rank}
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
+          {department.requirements.length > 0 && (
+            <Card>
+              <h2 className="text-lg text-bone">Requirements to Join</h2>
+              <ul className="mt-3 space-y-2 text-sm text-muted">
+                {department.requirements.map((requirement) => (
+                  <li key={requirement} className="flex items-start gap-2">
+                    <span className={accent.text}>›</span>
+                    {requirement}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+        </div>
+      )}
 
       <DepartmentRecruitmentGate
         departmentCode={department.code}

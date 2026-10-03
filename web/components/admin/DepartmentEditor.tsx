@@ -51,27 +51,13 @@ export function DepartmentEditor() {
 
       <div className="space-y-5">
         {departments.map((department) => (
-          <Card key={department.code} className="space-y-5 p-5">
+          <Card key={department.code} padded={false} className="space-y-5 p-5">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-steel">{department.code}</p>
                 <h2 className="mt-1 text-2xl text-bone">{department.name}</h2>
               </div>
 
-              <label className="flex items-center gap-2 text-sm text-muted">
-                <input
-                  type="checkbox"
-                  checked={department.recruitmentOpen}
-                  onChange={(event) =>
-                    updateDepartment(department.code, (entry) => ({
-                      ...entry,
-                      recruitmentOpen: event.target.checked,
-                    }))
-                  }
-                  className="h-4 w-4 rounded border-line bg-surface text-trooper-500"
-                />
-                Recruitment open
-              </label>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -119,7 +105,7 @@ export function DepartmentEditor() {
               />
             </label>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3">
               <label className="block text-sm text-muted">
                 <span className="mb-2 block text-bone">Features</span>
                 <textarea
@@ -136,10 +122,27 @@ export function DepartmentEditor() {
               </label>
 
               <label className="block text-sm text-muted">
-                <span className="mb-2 block text-bone">Requirements</span>
+                <span className="mb-2 block text-bone">Published ranks</span>
+                <textarea
+                  rows={5}
+                  value={formatLines(department.ranks)}
+                  placeholder="Add only confirmed department ranks."
+                  onChange={(event) =>
+                    updateDepartment(department.code, (entry) => ({
+                      ...entry,
+                      ranks: parseLines(event.target.value),
+                    }))
+                  }
+                  className="w-full rounded-xl border border-line bg-[#12160f] px-3 py-2.5 text-base text-bone outline-none focus:border-trooper-500"
+                />
+              </label>
+
+              <label className="block text-sm text-muted">
+                <span className="mb-2 block text-bone">Published requirements</span>
                 <textarea
                   rows={5}
                   value={formatLines(department.requirements)}
+                  placeholder="Add only confirmed entry requirements."
                   onChange={(event) =>
                     updateDepartment(department.code, (entry) => ({
                       ...entry,

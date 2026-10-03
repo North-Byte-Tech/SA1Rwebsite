@@ -60,12 +60,12 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 <span className="block text-trooper-300">1st Response RP</span>
               </span>
             </Link>
-            <nav aria-label="Main navigation" className="order-3 -mx-4 flex w-[calc(100%+2rem)] flex-wrap items-center justify-start gap-x-1 overflow-hidden border-t border-line px-2 pt-1 text-[11px] sm:mx-0 sm:w-full sm:px-0 sm:text-xs lg:order-none lg:w-auto lg:flex-1 lg:flex-nowrap lg:justify-center lg:overflow-visible lg:border-0 lg:pt-0">
+            <nav aria-label="Main navigation" className="site-nav-scroll order-3 -mx-4 flex w-[calc(100%+2rem)] flex-nowrap items-center justify-start gap-x-0 overflow-x-auto overscroll-x-contain border-t border-line px-2 pt-1 text-[11px] sm:mx-0 sm:w-full sm:gap-x-1 sm:px-0 sm:text-xs lg:order-none lg:w-auto lg:flex-1 lg:justify-center lg:overflow-visible lg:border-0 lg:pt-0">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="nav-link relative whitespace-nowrap px-2.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
+                  className="nav-link relative shrink-0 whitespace-nowrap px-1.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
                 >
                   {link.label}
                 </Link>
@@ -74,20 +74,22 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 href="https://fire.sa1r.com"
                 target="_blank"
                 rel="noreferrer"
-                className="nav-link relative whitespace-nowrap px-2.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
+                className="nav-link relative shrink-0 whitespace-nowrap px-1.5 py-2 font-semibold uppercase tracking-wider text-muted transition-colors hover:text-bone sm:px-3"
               >
                 SAFD
               </a>
               {session?.permissions.includes(STAFF_ADMIN_PERMISSION) && (
                 <Link
                   href="/admin"
-                  className="rounded-sm border border-trooper-500/40 bg-trooper-700/20 px-3 py-1.5 font-semibold uppercase tracking-wider text-bone transition-colors hover:border-trooper-400"
+                  className="shrink-0 rounded-sm border border-trooper-500/40 bg-trooper-700/20 px-3 py-1.5 font-semibold uppercase tracking-wider text-bone transition-colors hover:border-trooper-400"
                 >
                   Staff Panel
                 </Link>
               )}
             </nav>
-            <AuthButton signedIn={Boolean(session)} />
+            <div className="shrink-0">
+              <AuthButton signedIn={Boolean(session)} />
+            </div>
           </div>
         </header>
 
@@ -125,16 +127,24 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             ))}
           </div>
           <div className="border-t border-line/60">
-            <div className="mx-auto w-full max-w-7xl px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
-              <p>© {new Date().getFullYear()} San Andreas 1st Response RP — Immersive FiveM RP adventures await.</p>
-              <a
-                href="https://northbytetech.com"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-flex items-center justify-center rounded-full border border-line bg-surface-raised px-2.5 py-1 text-[11px] font-medium text-steel transition-colors hover:border-steel-300/70 hover:text-bone"
-              >
-                Built by NorthByteTech
-              </a>
+            <div className="mx-auto w-full max-w-7xl space-y-2 px-4 py-5 text-center text-xs text-muted sm:px-6 lg:px-8">
+              <p>
+                Website design and development © 2026{" "}
+                <a
+                  href="https://northbytetech.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-trooper-300 transition-colors hover:text-bone hover:underline"
+                >
+                  NorthByteTech
+                </a>
+                . All rights reserved.
+              </p>
+              <p>Images and logo © 2026 San Andreas 1st Response RP (SA1RP).</p>
+              <p>
+                San Andreas 1st Response RP is not affiliated with, endorsed by, or sponsored by Rockstar Games or
+                Take-Two Interactive.
+              </p>
             </div>
           </div>
         </footer>

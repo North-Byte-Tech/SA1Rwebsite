@@ -3,8 +3,6 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
 import { IconTile, type IconTileTone } from "@/components/ui/IconTile";
 
-// Placeholder copy - replace each section body with the community's actual
-// rules before launch.
 const RULE_SECTIONS = [
   {
     title: "Roleplay quality",
@@ -38,7 +36,7 @@ const RULE_SECTIONS = [
   },
   {
     title: "Enforcement",
-    body: "Staff decisions follow a documented warning → kick → ban escalation. Appeals go through Discord.",
+    body: "Follow staff directions. Check the official community rules in Discord for the current moderation and appeal process.",
     icon: ShieldAlert,
     tone: "gold",
   },
@@ -48,8 +46,7 @@ export default function RulesPage() {
   return (
     <div className="space-y-8">
       <PageHeader title="Server Rules">
-        The short version, so you know what's expected before you jump in. The full, binding rules are pinned in
-        Discord - read those before you play.
+        This is a quick overview, not the complete rulebook. Read the current official rules in the community Discord before playing.
       </PageHeader>
       <div className="grid gap-4 sm:grid-cols-2">
         {RULE_SECTIONS.map((section) => (

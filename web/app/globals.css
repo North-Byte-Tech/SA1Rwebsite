@@ -26,6 +26,14 @@ h3 {
     @apply bg-gradient-brand bg-clip-text text-transparent;
   }
 
+  .site-nav-scroll {
+    scrollbar-width: none;
+  }
+
+  .site-nav-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
     .page-heading {
       @apply relative space-y-3 border-b border-line pb-6;
     }

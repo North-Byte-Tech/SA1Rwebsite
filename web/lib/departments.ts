@@ -49,14 +49,7 @@ export interface DepartmentInfo {
   features: string[];
   accent: DepartmentAccent;
   externalSiteUrl?: string;
-  // Whether the public department page links to the apply form. The apply
-  // route itself always works regardless of this flag - see
-  // app/departments/[slug]/apply/page.tsx - so staff can exercise the full
-  // submission flow before advertising it.
-  recruitmentOpen: boolean;
-  // Placeholder rank ladder and entry requirements shown on the department
-  // detail page - replace with the community's actual structure before
-  // launch, same as rules/page.tsx's RULE_SECTIONS.
+  // Only publish these details after department staff have confirmed them.
   ranks: string[];
   requirements: string[];
   // Optional grouped roster of real in-universe agencies this one
@@ -74,14 +67,8 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
     summary: "One recruitment page covering all of San Andreas' law enforcement agencies - patrol, investigations, and tactical response.",
     features: ["Multiple LEO agencies, one application", "Patrol & investigations", "Structured rank progression"],
     accent: "blue",
-    recruitmentOpen: false,
-    ranks: ["Recruit Officer", "Officer", "Senior Officer", "Sergeant", "Senior Sergeant", "Inspector"],
-    requirements: [
-      "Linked Discord and FiveM account in good standing",
-      "Clean in-character record for at least 7 days",
-      "Comfortable with radio codes and basic RP procedure",
-      "Available for at least one shift per week once appointed",
-    ],
+    ranks: [],
+    requirements: [],
     agencyGroups: [
       {
         heading: "State Agencies",
@@ -124,14 +111,8 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
     features: ["Fire & rescue response", "EMS support operations", "Dispatch & incident coordination"],
     accent: "red",
     externalSiteUrl: "https://fire.sa1r.com",
-    recruitmentOpen: false,
-    ranks: ["Recruit Firefighter", "Firefighter", "Senior Firefighter", "Station Officer", "Senior Station Officer"],
-    requirements: [
-      "Linked Discord and FiveM account in good standing",
-      "Willingness to train on apparatus, rescue, and medical support operations",
-      "Comfortable coordinating with police, dispatch, and multi-agency scenes",
-      "Available for at least one shift per week once appointed",
-    ],
+    ranks: [],
+    requirements: [],
   },
   {
     code: "DISPATCH",
@@ -140,14 +121,8 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
     summary: "Regional communications, radio operations, and dispatch coordination for emergency services.",
     features: ["Regional emergency dispatch", "Radio & call handling", "Multi-agency coordination"],
     accent: "blue",
-    recruitmentOpen: false,
-    ranks: ["Trainee Dispatcher", "Dispatcher", "Senior Dispatcher", "Shift Supervisor", "Operations Supervisor"],
-    requirements: [
-      "Linked Discord and FiveM account in good standing",
-      "Comfortable managing radio traffic and incident flow",
-      "Strong communication and coordination skills under pressure",
-      "Available for at least one shift per week once appointed",
-    ],
+    ranks: [],
+    requirements: [],
   },
   {
     code: "CIV",
@@ -156,14 +131,8 @@ export const DEFAULT_DEPARTMENTS: DepartmentInfo[] = [
     summary: "Civilian life, community support, and non-emergency public engagement across the state.",
     features: ["Civilian roleplay", "Community engagement", "Non-emergency support"],
     accent: "amber",
-    recruitmentOpen: false,
-    ranks: ["Resident", "Community Member", "Senior Community Member", "Support Lead", "Community Mentor"],
-    requirements: [
-      "Linked Discord and FiveM account in good standing",
-      "Willingness to participate in community events and RP scenes",
-      "Friendly, respectful communication with all community members",
-      "Available for regular in-character community activity",
-    ],
+    ranks: [],
+    requirements: [],
   },
 ];
 

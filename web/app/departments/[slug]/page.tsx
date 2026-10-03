@@ -5,7 +5,7 @@ import { Flame, HeartPulse, Radio, Shield, ShieldCheck } from "lucide-react";
 import { buttonClasses } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { DepartmentRecruitmentGate, DepartmentRecruitmentPill } from "@/components/DepartmentRecruitmentStatus";
+import { DepartmentRecruitmentGate, DepartmentRecruitmentPill, DepartmentRecruitmentStatus } from "@/components/DepartmentRecruitmentStatus";
 import { DEPARTMENT_ACCENT_CLASSES, getDepartmentBySlug, getDepartmentImage, slugifyAgency, type DepartmentCode } from "@/lib/departments";
 
 const DEPARTMENT_ICONS: Record<DepartmentCode, typeof Shield> = {
@@ -67,15 +67,15 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-muted">Recruitment</p>
-              <h2 className="mt-1 text-2xl text-bone">{department.recruitmentOpen ? "Applications Open" : "Applications Closed"}</h2>
+              <h2 className="mt-1 text-2xl text-bone">
+                Applications <DepartmentRecruitmentStatus departmentCode={department.code} />
+              </h2>
             </div>
             <DepartmentRecruitmentPill departmentCode={department.code} />
           </div>
 
           <p className="text-sm text-muted">
-            {department.recruitmentOpen
-              ? `Apply to join ${department.name} and start your roleplay journey with the department.`
-              : "Recruitment is currently closed. Check back later for future intake windows."}
+            {`Check current recruitment availability for ${department.name}. When applications are open, sign in and submit the department application form.`}
           </p>
 
           <DepartmentRecruitmentGate
@@ -113,32 +113,38 @@ export default function DepartmentPage({ params }: { params: { slug: string } })
         ))}
       </ul>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <h2 className="text-lg text-bone">Rank Structure</h2>
-          <ol className="mt-3 space-y-2 text-sm">
-            {department.ranks.map((rank, index) => (
-              <li key={rank} className="flex items-center gap-3 text-muted">
-                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-bone ${accent.iconBg}`}>
-                  {index + 1}
-                </span>
-                {rank}
-              </li>
-            ))}
-          </ol>
-        </Card>
-        <Card>
-          <h2 className="text-lg text-bone">Requirements to Join</h2>
-          <ul className="mt-3 space-y-2 text-sm text-muted">
-            {department.requirements.map((requirement) => (
-              <li key={requirement} className="flex items-start gap-2">
-                <span className={accent.text}>›</span>
-                {requirement}
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </div>
+      {(department.ranks.length > 0 || department.requirements.length > 0) && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {department.ranks.length > 0 && (
+            <Card>
+              <h2 className="text-lg text-bone">Rank Structure</h2>
+              <ol className="mt-3 space-y-2 text-sm">
+                {department.ranks.map((rank, index) => (
+                  <li key={rank} className="flex items-center gap-3 text-muted">
+                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-bone ${accent.iconBg}`}>
+                      {index + 1}
+                    </span>
+                    {rank}
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
+          {department.requirements.length > 0 && (
+            <Card>
+              <h2 className="text-lg text-bone">Requirements to Join</h2>
+              <ul className="mt-3 space-y-2 text-sm text-muted">
+                {department.requirements.map((requirement) => (
+                  <li key={requirement} className="flex items-start gap-2">
+                    <span className={accent.text}>›</span>
+                    {requirement}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+        </div>
+      )}
 
       {department.agencyGroups && (
         <div className="grid gap-4 sm:grid-cols-2">

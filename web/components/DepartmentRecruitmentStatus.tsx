@@ -21,7 +21,7 @@ export function DepartmentRecruitmentStatus({ departmentCode }: { departmentCode
     };
   }, [departmentCode]);
 
-  return <>{open ? "Recruiting" : "Closed"}</>;
+  return <>{open ? "Open" : "Closed"}</>;
 }
 
 export function DepartmentRecruitmentPill({ departmentCode }: { departmentCode: DepartmentCode }) {

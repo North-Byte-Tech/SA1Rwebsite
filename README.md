@@ -1,8 +1,7 @@
 # SA1R Website
 
-San Andreas 1st Response RP's public website, player portal, staff admin
-dashboard, and emergency-department (LEO/SAFD/SAEMS) recruitment + live
-status portal.
+San Andreas 1st Response RP's public website, staff admin dashboard, and
+emergency-department (LEO/SAFD/SAEMS) recruitment.
 
 A pnpm workspace with two deployable services:
 
@@ -10,13 +9,12 @@ A pnpm workspace with two deployable services:
   site, player portal, admin dashboard, all gated by a Discord-OAuth
   session. Owns its own Postgres database (via Prisma — see
   `web/prisma/schema.prisma`) as its ONLY datastore: accounts, staff
-  roster, bans, player notes, permissions, applications, and the live
-  status snapshot all live there. Never touches the game's MySQL database.
+  roster, bans, player notes, permissions, and applications all live there.
+  Never touches the game's MySQL database.
 - [`discord-bot/`](discord-bot/) — Express + discord.js process, ported from
   the game-server repo (`SFRP_Core`)'s `services/discord-bot` and deployed on
-  the game-server host (it needs direct MySQL access for role sync). For the
-  website, it keeps a live on-duty status board in Discord by polling
-  `web`'s public `GET /api/status`. See its README.
+  the game-server host (it needs direct MySQL access for role sync). It can
+  optionally send website recruitment notifications. See its README.
 
 `portal-api/` (the Express service that used to bridge `web` to the FiveM
 game server's MySQL database) has been retired - every feature it provided

@@ -13,8 +13,6 @@ Jobs:
    `/lookup-player`) for staff to manage a linked player's permissions.
 3. **Audit log** (optional) — posts an embed to a Discord channel for game
    events (connect/disconnect, character creation, duty status, etc.).
-4. **Live status board** (optional, website) — keeps a single message in a
-   channel up to date by polling the website's public `GET /api/status`.
 
 ## Website integration
 
@@ -27,16 +25,9 @@ The website integrations added on top of the ported bot are:
    `DISCORD_LOG_CHANNEL_ID`. Configure the website's `DISCORD_BOT_WEBHOOK_URL`
    and `DISCORD_BOT_WEBHOOK_SECRET`; the secret must match this bot's
    `DISCORD_RECRUITMENT_SECRET` (or its `FXSERVER_LOG_SECRET` fallback).
-- **Live status board** — this bot polls the website's public `GET /api/status`
-   every `STATUS_POLL_SECONDS` and edits one message in
-   `DISCORD_STATUS_CHANNEL_ID`. No secret is needed. It only edits when the
-   snapshot's `updatedAt` changes, and reuses its most recent board message
-   across restarts rather than posting duplicates.
 
-Both optional features are independent: leave `DISCORD_STATUS_CHANNEL_ID` blank
-to disable the status board, or omit the website webhook settings to disable
-recruitment notifications. `DISCORD_LOG_CHANNEL_ID` only controls game audit
-embeds.
+Recruitment notifications are optional; omit the website webhook settings to
+disable them. `DISCORD_LOG_CHANNEL_ID` only controls game audit embeds.
 
 ## Setup
 
@@ -54,8 +45,6 @@ embeds.
    this bot's reachable base URL (for example,
    `http://127.0.0.1:30121`). For acceptance roles, set the relevant
    `DISCORD_ROLE_LEO`, `DISCORD_ROLE_SAFD`, and/or `DISCORD_ROLE_SAEMS` role
-   IDs. For the status board, set `DISCORD_STATUS_CHANNEL_ID` and
-   `WEB_BASE_URL` to the deployed website's base URL.
 5. Populate `discord_role_mappings` (see the main SFOS repo's
    `database/migrations/0002_permissions.sql`) with your Discord role IDs
    mapped to `sa1r.role.*` permissions.
@@ -69,4 +58,4 @@ Slash commands are registered automatically (guild-scoped) on every start.
 
 Set `DEBUG=true` in `.env` (restart required) for verbose console output:
 role sync decisions, slash command invocations, `/log` payloads received,
-FXServer notification results, and status board polling.
+FXServer notification results.

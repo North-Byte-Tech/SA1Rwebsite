@@ -38,14 +38,4 @@ export const config = {
       SAEMS: process.env.DISCORD_ROLE_SAEMS ?? "",
     },
   },
-  // Website integration - the live on-duty status board. The bot polls the
-  // web app's public GET /api/status (no secret needed) and edits a single
-  // message in the configured channel. Both must be set
-  // to enable it; leave DISCORD_STATUS_CHANNEL_ID blank to skip the feature
-  // entirely, the same graceful-degradation stance as the audit-log server.
-  status: {
-    channelId: process.env.DISCORD_STATUS_CHANNEL_ID ?? "",
-    webBaseUrl: process.env.WEB_BASE_URL ?? "",
-    pollSeconds: Number(process.env.STATUS_POLL_SECONDS ?? 60),
-  },
 };

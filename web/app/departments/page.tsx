@@ -20,11 +20,7 @@ export default function DepartmentsPage() {
   return (
     <div className="space-y-8">
       <PageHeader title="Emergency Departments">
-        Live counts of who&apos;s currently on duty:{" "}
-        <Link href="/status" className="text-trooper-400 hover:underline">
-          Live Status
-        </Link>
-        .
+        Explore emergency services, community roles, and current recruitment opportunities.
       </PageHeader>
 
       <div className="grid gap-4 sm:grid-cols-3">

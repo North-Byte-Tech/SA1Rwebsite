@@ -40,13 +40,6 @@ const QUICK_LINKS = [
     icon: ShieldCheck,
     tone: "gold",
   },
-  {
-    href: "/status",
-    title: "Live Status",
-    body: "Who's on duty right now.",
-    icon: Radio,
-    tone: "trooper",
-  },
 ] satisfies { href: string; title: string; body: string; icon: typeof Compass; tone: IconTileTone }[];
 
 export default async function HomePage() {

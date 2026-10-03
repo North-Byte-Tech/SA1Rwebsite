@@ -24,13 +24,12 @@ safe to leave set permanently for whoever should always have admin;
 everyone else's access should be granted through the admin UI instead.
 
 **Current feature set**: public pages (landing, rules, how-to-join,
-department overview/detail), a live on-duty status board (`/status`,
-reading this app's own `/api/status`, backed by `prisma.statusSnapshot` -
-see `lib/status.ts`), a recruitment application form per department
+department overview/detail), a recruitment application form per department
 (`/departments/[slug]/apply`, posting to `/api/applications`, which
-requires only a signed-in session). Department portals are hosted separately
-and will be linked from this site once their URLs are ready. Department pages
-only link to `/apply` when that
+requires only a signed-in session). The SAFD site is linked at
+`https://fire.sa1r.com`; other department sites can be added when their URLs
+are ready. Live game-server status reporting is not included yet and can be
+added later. Department pages only link to `/apply` when that
 department's `recruitmentOpen` flag (`lib/departments.ts`) is `true` - flip
 it per department once you're ready to accept applications; the apply
 route itself works regardless, for testing. The admin dashboard
@@ -71,11 +70,8 @@ fixed fake signed-in admin session with zero Postgres/Discord setup. See
    (`DATABASE_URL` = your Postgres connection string, `NEXTAUTH_URL` = your
    real production domain).
 4. Run `prisma migrate deploy` against that `DATABASE_URL` once (locally,
-   with it set in your shell, or via a one-off Vercel build command) to
-   create the tables before the first deploy.
+   with it set in your shell, or from a secure one-off command) to create the
+   tables before the first deploy. This applies the latest schema, including
+   removal of the unused game-server status table.
 5. Add a second Discord OAuth redirect URI for the production domain:
    `https://<your-domain>/api/auth/callback/discord`.
-6. If the FiveM server should push live on-duty status here, set
-   `STATUS_REPORT_SECRET` and point its status-push script at
-   `https://<your-domain>/api/status/report` with that secret in the
-   `x-sa1r-status-secret` header.

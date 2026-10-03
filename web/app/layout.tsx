@@ -20,7 +20,6 @@ const NAV_LINKS = [
   { href: "/guide", label: "Guide" },
   { href: "/join", label: "How to Join" },
   { href: "/departments", label: "Departments" },
-  { href: "/status", label: "Live Status" },
 ] as const;
 
 const FOOTER_SECTIONS = [
@@ -31,7 +30,6 @@ const FOOTER_SECTIONS = [
       { href: "/guide", label: "Guide" },
       { href: "/join", label: "How to Join" },
       { href: "/departments", label: "Departments" },
-      { href: "/status", label: "Live Status" },
       { href: "https://fire.sa1r.com", label: "SAFD Fire & Rescue" },
     ],
   },

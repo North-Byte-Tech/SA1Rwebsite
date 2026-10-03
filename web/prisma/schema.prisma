@@ -176,13 +176,3 @@ model AuditLog {
 
   @@index([createdAt])
 }
-
-// Single-row live server status snapshot, reported by the FiveM server (or
-// anything else with the shared secret) and read by the public status board
-// and the Discord bot's status announcer - replaces portal-api's in-memory
-// statusStore.ts with a persistent equivalent.
-model StatusSnapshot {
-  id        Int      @id @default(1)
-  data      Json
-  updatedAt DateTime @updatedAt
-}
